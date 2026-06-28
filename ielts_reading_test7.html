@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Academic Reading Mock Test 8</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg2:#f4f6f8;--bg3:#e8ecf0;--text:#1a1a2e;--text2:#3a3a5c;--text3:#7a7a9a;
+  --border:#d0d5dd;--accent:#1a5276;--accent2:#1d8348;
+  --header:#0f2740;--flag:#e67e22;--correct:#1d8348;--wrong:#c0392b;
+  --palette-done:#1d8348;--palette-flag:#e67e22;--palette-active:#1a5276;
+  --hl-yellow:#ffe066;--hl-yellow-text:#1a1a2e;
+  --hl-green:#a8f0c6;--hl-green-text:#0a2e1a;
+  --ruler-bg:rgba(26,82,118,.1);--ruler-border:rgba(26,82,118,.3);
+  --shadow:0 2px 12px rgba(0,0,0,.08);
+}
+body.dark{
+  --bg:#141820;--bg2:#1e2330;--bg3:#252d3d;--text:#e2e8f0;--text2:#a0aec0;--text3:#6b7280;
+  --border:#2d3748;--accent:#00C4FF;--accent2:#48bb78;--header:#0a0f1a;
+  --palette-done:#48bb78;--palette-active:#00C4FF;
+  --hl-yellow:#b8860b;--hl-yellow-text:#fff8e1;
+  --hl-green:#1a6b3a;--hl-green-text:#c6f6d5;
+  --ruler-bg:rgba(0,196,255,.1);--ruler-border:rgba(0,196,255,.4);
+  --shadow:0 2px 12px rgba(0,0,0,.3);
+}
+body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:var(--bg);color:var(--text);font-size:16px;transition:background .25s,color .25s;overflow:hidden}
+
+/* START SCREEN */
+#start-screen{position:fixed;inset:0;background:var(--header);z-index:9999;display:flex;align-items:center;justify-content:center;}
+.start-box{background:var(--bg);border-radius:20px;padding:48px 52px;max-width:540px;width:90%;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.4);}
+.start-logo{font-size:13px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:2px;margin-bottom:28px}
+.start-title{font-size:26px;font-weight:900;color:var(--text);margin-bottom:6px;line-height:1.2}
+.start-subtitle{font-size:14px;color:var(--text3);margin-bottom:32px}
+.start-info{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:36px}
+.info-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;padding:16px 8px}
+.info-val{font-size:26px;font-weight:900;color:var(--accent)}
+.info-lbl{font-size:11px;color:var(--text3);margin-top:3px;text-transform:uppercase;letter-spacing:.5px}
+.start-rules{text-align:left;background:var(--bg2);border-radius:12px;padding:16px 20px;margin-bottom:32px}
+.start-rules p{font-size:13px;color:var(--text2);line-height:1.8;padding-left:4px}
+.start-rules p::before{content:'›  ';color:var(--accent);font-weight:700}
+#start-btn{background:linear-gradient(135deg,var(--accent),#1a3a6b);color:#fff;border:none;padding:16px 48px;border-radius:12px;font-size:17px;font-weight:800;cursor:pointer;letter-spacing:.5px;transition:opacity .15s,transform .15s;width:100%}
+#start-btn:hover{opacity:.9;transform:translateY(-1px)}
+
+/* HEADER */
+#header{background:var(--header);padding:0 16px;display:flex;align-items:center;justify-content:space-between;position:fixed;top:0;left:0;right:0;z-index:1000;height:52px;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+#logo-area{font-weight:800;font-size:17px;color:#fff;letter-spacing:.5px;min-width:80px;opacity:.95}
+#passage-tabs{display:flex;gap:3px;background:rgba(255,255,255,.08);border-radius:7px;padding:3px}
+.ptab{background:transparent;color:rgba(255,255,255,.7);border:none;padding:5px 14px;border-radius:5px;cursor:pointer;font-size:13px;font-weight:600;transition:all .15s}
+.ptab:hover{color:#fff;background:rgba(255,255,255,.12)}
+.ptab.active{background:#fff;color:var(--header);font-weight:700}
+#header-right{display:flex;align-items:center;gap:6px}
+#timer-box{background:#c0392b;color:#fff;font-size:19px;font-weight:800;padding:5px 16px;border-radius:7px;letter-spacing:2px;min-width:86px;text-align:center;font-variant-numeric:tabular-nums}
+#timer-box.warn{background:#e67e22}
+#timer-box.critical{animation:blink .9s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.45}}
+.hbtn{background:rgba(255,255,255,.12);color:#fff;border:none;width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.hbtn:hover{background:rgba(255,255,255,.22)}
+
+/* SETTINGS */
+#settings-panel{display:none;position:fixed;top:58px;right:12px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px;z-index:2000;min-width:230px;box-shadow:0 8px 30px rgba(0,0,0,.18)}
+#settings-panel h3{font-size:13px;margin-bottom:14px;color:var(--text);border-bottom:1px solid var(--border);padding-bottom:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px}
+.sg{margin-bottom:14px}
+.sg label{display:block;font-size:11px;color:var(--text3);margin-bottom:7px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.sg-row{display:flex;gap:6px;flex-wrap:wrap}
+.sbtn{border:2px solid var(--border);background:var(--bg3);color:var(--text);padding:5px 10px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;transition:all .15s}
+.sbtn:hover{border-color:var(--accent)}
+.sbtn.active{border-color:var(--accent);background:var(--accent);color:#fff}
+.sbtn-fs{min-width:34px;text-align:center}
+
+/* MAIN LAYOUT */
+#main{margin-top:52px;display:flex;height:calc(100vh - 96px);overflow:hidden}
+#passage-panel{flex:1;min-width:200px;overflow-y:auto;padding:22px 28px 22px 24px;background:var(--bg);position:relative}
+#splitter{width:7px;background:var(--border);cursor:col-resize;flex-shrink:0;display:flex;align-items:center;justify-content:center;z-index:10;transition:background .15s;user-select:none}
+#splitter:hover,#splitter.dragging{background:var(--accent)}
+#splitter::after{content:'⋮';font-size:14px;color:var(--text3);pointer-events:none;line-height:1}
+#questions-panel{flex:1;min-width:200px;overflow-y:auto;padding:16px;background:var(--bg2)}
+
+/* PASSAGE */
+.passage-meta{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;opacity:.8}
+.passage-time-hint{font-size:12px;color:var(--text3);margin-bottom:10px;padding:5px 10px;background:var(--bg3);border-radius:5px;border-left:3px solid var(--accent)}
+.passage-heading{font-size:21px;font-weight:800;margin-bottom:4px;line-height:1.25;color:var(--text)}
+.passage-subheading{font-size:14px;font-style:italic;color:var(--text3);margin-bottom:18px;line-height:1.5}
+.passage-divider{border:none;border-top:2px solid var(--border);margin-bottom:18px}
+.passage-text p{margin-bottom:16px;line-height:1.85;color:var(--text);text-align:justify}
+.para-label{font-weight:800;color:var(--accent);margin-right:6px;font-size:15px}
+.footnote{font-size:13px;color:var(--text3);margin-top:18px;border-top:1px solid var(--border);padding-top:10px;font-style:italic}
+
+/* HIGHLIGHT */
+.hl-yellow{background:var(--hl-yellow);border-radius:2px;padding:1px 0;color:var(--hl-yellow-text)}
+.hl-green{background:var(--hl-green);border-radius:2px;padding:1px 0;color:var(--hl-green-text)}
+#ctx-menu{display:none;position:fixed;background:var(--bg2);border:1px solid var(--border);border-radius:9px;box-shadow:0 6px 20px rgba(0,0,0,.15);z-index:3000;min-width:190px;overflow:hidden;padding:4px 0}
+.ctx-item{padding:9px 16px;cursor:pointer;font-size:13px;color:var(--text);display:flex;align-items:center;gap:9px;transition:background .1s;justify-content:space-between}
+.ctx-item:hover{background:var(--bg3)}
+.ctx-item-left{display:flex;align-items:center;gap:9px}
+.ctx-dot{width:13px;height:13px;border-radius:3px;display:inline-block;flex-shrink:0}
+.ctx-key{font-size:10px;opacity:.5;font-family:monospace;background:var(--bg3);padding:2px 5px;border-radius:3px;border:1px solid var(--border)}
+
+/* WORD BANK */
+.word-bank{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:16px}
+.word-bank-title{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
+.word-bank-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px}
+.wb-item{background:var(--bg2);border:1.5px solid var(--border);border-radius:6px;padding:5px 10px;font-size:12px;color:var(--text);display:flex;gap:8px}
+.wb-letter{font-weight:800;color:var(--accent);min-width:14px}
+
+/* QUESTIONS */
+.q-section-title{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.6px;margin:18px 0 6px;padding:7px 11px;background:var(--bg3);border-radius:6px;border-left:3px solid var(--accent)}
+.q-range-label{font-size:15px;font-weight:800;color:var(--text);margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--accent)}
+.q-instruction{font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.6;padding:9px 12px;background:var(--bg);border-left:3px solid var(--flag);border-radius:0 6px 6px 0}
+.q-block{margin-bottom:11px;padding:11px 13px;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;position:relative;transition:border-color .15s,box-shadow .15s}
+.q-block:hover{box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-block.flagged{border-left:4px solid var(--flag)}
+.q-block.answered{border-left:4px solid var(--accent2)}
+.q-num{font-weight:700;font-size:12px;color:var(--accent);margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px}
+.q-text{font-size:14px;color:var(--text);margin-bottom:9px;line-height:1.55}
+.q-input{width:100%;border:1.5px solid var(--border);border-radius:6px;padding:7px 11px;font-size:14px;background:var(--bg2);color:var(--text);outline:none;transition:border-color .15s}
+.q-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,82,118,.12)}
+.q-options{display:flex;flex-direction:column;gap:5px}
+.q-option{display:flex;align-items:flex-start;gap:9px;padding:7px 9px;border-radius:6px;cursor:pointer;font-size:13px;color:var(--text);border:1.5px solid transparent;transition:all .12s}
+.q-option:hover{background:var(--bg3)}
+.q-option input{margin-top:2px;cursor:pointer;accent-color:var(--accent);width:15px;height:15px;flex-shrink:0}
+.q-option.selected{background:rgba(26,82,118,.08);border-color:rgba(26,82,118,.28)}
+body.dark .q-option.selected{background:rgba(0,196,255,.1);border-color:rgba(0,196,255,.3)}
+.tfng-btns{display:flex;gap:6px;flex-wrap:wrap}
+.tfng-btn{border:1.5px solid var(--border);background:var(--bg2);color:var(--text);padding:6px 13px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;transition:all .12s;letter-spacing:.3px}
+.tfng-btn:hover{border-color:var(--accent);color:var(--accent)}
+.tfng-btn.selected{background:var(--accent);color:#fff;border-color:var(--accent)}
+.flag-btn{position:absolute;top:9px;right:9px;background:none;border:none;cursor:pointer;font-size:15px;color:var(--text3);padding:2px 5px;border-radius:4px;line-height:1;transition:color .15s}
+.flag-btn:hover{color:var(--flag)}
+.flag-btn.active{color:var(--flag)}
+
+/* MATCH person bank */
+.person-bank{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:16px}
+.person-bank-title{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
+.person-bank-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px}
+.pb-item{background:var(--bg2);border:1.5px solid var(--border);border-radius:6px;padding:5px 10px;font-size:12px;color:var(--text);display:flex;gap:8px}
+.pb-letter{font-weight:800;color:var(--accent);min-width:14px}
+
+/* PALETTE */
+#palette-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1.5px solid var(--border);padding:5px 10px;z-index:800;display:flex;align-items:center;gap:4px;overflow-x:auto;height:44px}
+#palette-bar::-webkit-scrollbar{height:3px}
+#palette-bar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.pal-label{font-size:10px;color:var(--text3);font-weight:700;white-space:nowrap;flex-shrink:0;text-transform:uppercase;letter-spacing:.4px}
+.pal-num{width:25px;height:25px;border-radius:5px;border:1.5px solid var(--border);background:var(--bg3);color:var(--text);font-size:10px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s}
+.pal-num:hover{border-color:var(--accent);color:var(--accent)}
+.pal-num.done{background:var(--palette-done);color:#fff;border-color:var(--palette-done)}
+.pal-num.flagged{background:var(--palette-flag);color:#fff;border-color:var(--palette-flag)}
+.pal-num.active{border:2.5px solid var(--palette-active);box-shadow:0 0 0 2px rgba(26,82,118,.2)}
+.pal-legend{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3);flex-shrink:0;white-space:nowrap;margin-left:2px}
+.pal-dot{width:9px;height:9px;border-radius:2px;display:inline-block;flex-shrink:0}
+#submit-btn{background:linear-gradient(135deg,#c0392b,#a93226);color:#fff;border:none;padding:6px 16px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;margin-left:auto;letter-spacing:.3px;transition:opacity .15s}
+#submit-btn:hover{opacity:.88}
+
+/* NOTES */
+#notes-toggle{position:fixed;bottom:54px;right:14px;z-index:900;background:var(--accent);color:#fff;border:none;border-radius:50%;width:40px;height:40px;font-size:18px;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.25);transition:transform .15s}
+#notes-toggle:hover{transform:scale(1.1)}
+#notes-box{display:none;position:fixed;bottom:102px;right:14px;z-index:900;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px;width:270px;box-shadow:0 8px 24px rgba(0,0,0,.15)}
+#notes-box h4{font-size:11px;color:var(--text3);margin-bottom:8px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+#notes-ta{width:100%;height:130px;background:var(--bg);color:var(--text);border:1.5px solid var(--border);border-radius:7px;padding:9px;font-size:13px;resize:vertical;outline:none;font-family:inherit;line-height:1.5}
+#notes-ta:focus{border-color:var(--accent)}
+
+/* RULER */
+#ruler{position:fixed;left:0;height:28px;background:var(--ruler-bg);pointer-events:none;display:none;z-index:500;border-top:1px solid var(--ruler-border);border-bottom:1px solid var(--ruler-border)}
+
+/* RESULTS */
+#results-screen{display:none;position:fixed;inset:0;background:var(--bg);z-index:5000;overflow-y:auto;padding:30px 20px}
+.res-header{text-align:center;margin-bottom:28px}
+.res-header h1{font-size:24px;color:var(--accent);margin-bottom:8px;font-weight:800}
+.band-circle{width:140px;height:140px;border-radius:50%;border:6px solid var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 8px;background:var(--bg2)}
+.band-num{font-size:52px;font-weight:900;color:var(--accent);line-height:1}
+.band-lbl{font-size:11px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.band-desc{font-size:14px;color:var(--text2);margin-bottom:4px;font-weight:600}
+.band-note{font-size:11px;color:var(--text3);margin-bottom:20px;font-style:italic}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;max-width:660px;margin:0 auto 20px}
+.stat-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;padding:16px;text-align:center}
+.stat-val{font-size:30px;font-weight:800;color:var(--accent)}
+.stat-lbl{font-size:11px;color:var(--text3);margin-top:3px;text-transform:uppercase;letter-spacing:.4px}
+.p-breakdown{max-width:760px;margin:0 auto 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.p-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:11px;padding:14px}
+.p-card h4{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.p-card-stats{display:flex;gap:12px;font-size:13px}
+.review-section{max-width:760px;margin:0 auto 20px}
+.review-section h3{font-size:15px;font-weight:700;color:var(--text);margin-bottom:12px}
+.review-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
+.review-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:9px;padding:10px 12px}
+.review-card.correct{border-left:4px solid var(--correct)}
+.review-card.wrong{border-left:4px solid var(--wrong)}
+.review-card.unanswered{border-left:4px solid var(--text3)}
+.rev-q{font-weight:700;font-size:12px;color:var(--text);margin-bottom:3px}
+.rev-yours{font-size:12px;color:var(--wrong)}
+.rev-correct{font-size:12px;color:var(--correct)}
+.res-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:20px;padding-bottom:30px}
+.res-btn{padding:11px 24px;border-radius:8px;border:none;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s}
+.res-btn:hover{opacity:.85}
+.res-btn-primary{background:var(--accent);color:#fff}
+.res-btn-secondary{background:var(--bg3);color:var(--text);border:1.5px solid var(--border)}
+.tg-btn{background:#229ED9;color:#fff;display:inline-flex;align-items:center;gap:8px;padding:11px 24px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:700;transition:opacity .15s}
+.tg-btn:hover{opacity:.88}
+
+/* REVIEW MODE */
+.q-input.correct-ans{border-color:var(--correct)!important;background:rgba(29,131,72,.09)!important}
+.q-input.wrong-ans{border-color:var(--wrong)!important;background:rgba(192,57,43,.09)!important}
+.tfng-btn.correct-ans{background:var(--correct)!important;color:#fff!important;border-color:var(--correct)!important}
+.tfng-btn.wrong-ans{background:var(--wrong)!important;color:#fff!important;border-color:var(--wrong)!important}
+.answer-reveal{font-size:11px;color:var(--correct);margin-top:5px;font-weight:700}
+.answer-hint{font-size:11px;color:var(--text3);margin-top:4px;font-style:italic;line-height:1.5;padding:5px 8px;background:var(--bg2);border-radius:5px;border-left:2px solid var(--accent)}
+
+/* FLASH */
+@keyframes pal-flash{0%,100%{background:var(--bg3)}50%{background:#e74c3c;color:#fff;border-color:#e74c3c}}
+.pal-num.flash{animation:pal-flash .5s ease 3}
+
+/* SCROLL INDICATOR */
+#scroll-bar{position:absolute;top:0;left:0;width:0%;height:3px;background:var(--accent);z-index:5;transition:width .1s;border-radius:0 2px 2px 0}
+
+/* BACK TO RESULTS */
+#back-to-results{display:none;position:fixed;top:60px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;border:none;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;z-index:4000;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:opacity .15s}
+#back-to-results:hover{opacity:.88}
+
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-track{background:transparent}
+
+@media(max-width:768px){
+  #main{flex-direction:column;height:calc(100vh - 96px)}
+  #passage-panel{height:50%;border-bottom:2px solid var(--border);padding:14px}
+  #questions-panel{width:100%;height:50%}
+  #splitter{width:100%;height:7px;cursor:row-resize}
+  #splitter::after{content:'···'}
+}
+</style>
+</head>
+<body>
+
+<!-- START SCREEN -->
+<div id="start-screen">
+  <div class="start-box">
+    <div class="start-logo">IELTS Academic Reading</div>
+    <div class="start-title">Mock Test</div>
+    <div class="start-subtitle">Computer-Delivered Format</div>
+    <div class="start-info">
+      <div class="info-card"><div class="info-val">3</div><div class="info-lbl">Passages</div></div>
+      <div class="info-card"><div class="info-val">40</div><div class="info-lbl">Questions</div></div>
+      <div class="info-card"><div class="info-val">60</div><div class="info-lbl">Minutes</div></div>
+    </div>
+    <div class="start-rules">
+      <p>Read each passage carefully and answer all 40 questions.</p>
+      <p>Highlight text by selecting it and right-clicking or using Shift+Y / Shift+G.</p>
+      <p>Flag any question to return to it later.</p>
+      <p>Your answers are saved automatically.</p>
+      <p>The timer starts when you click Begin.</p>
+    </div>
+    <button id="start-btn" onclick="beginTest()">▶ Begin Test</button>
+  </div>
+</div>
+
+<!-- CONTEXT MENU -->
+<div id="ctx-menu">
+  <div class="ctx-item" onclick="applyHighlight('yellow')">
+    <div class="ctx-item-left"><span class="ctx-dot" style="background:#ffe066;border:1px solid #cca800"></span>Yellow highlight</div>
+    <span class="ctx-key">Shift+Y</span>
+  </div>
+  <div class="ctx-item" onclick="applyHighlight('green')">
+    <div class="ctx-item-left"><span class="ctx-dot" style="background:#a8f0c6;border:1px solid #2e7d52"></span>Green highlight</div>
+    <span class="ctx-key">Shift+G</span>
+  </div>
+  <div class="ctx-item" onclick="removeHighlight()">
+    <div class="ctx-item-left"><span style="font-size:13px;opacity:.5;width:13px;text-align:center">✕</span>Remove highlight</div>
+    <span class="ctx-key">Shift+R</span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div id="header">
+  <div id="logo-area">IELTS</div>
+  <div id="passage-tabs">
+    <button class="ptab active" onclick="switchPassage(0)">Passage 1</button>
+    <button class="ptab" onclick="switchPassage(1)">Passage 2</button>
+    <button class="ptab" onclick="switchPassage(2)">Passage 3</button>
+  </div>
+  <div id="header-right">
+    <div id="timer-box">60:00</div>
+    <button class="hbtn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <button class="hbtn" onclick="toggleSettings()" title="Settings">⚙</button>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div id="settings-panel">
+  <h3>⚙ Settings</h3>
+  <div class="sg">
+    <label>Theme</label>
+    <div class="sg-row">
+      <button class="sbtn active" onclick="setTheme('light',this)">☀ Light</button>
+      <button class="sbtn" onclick="setTheme('dark',this)">🌙 Dark</button>
+    </div>
+  </div>
+  <div class="sg">
+    <label>Font Size</label>
+    <div class="sg-row">
+      <button class="sbtn sbtn-fs active" onclick="setFont(15,this)" style="font-size:12px">A</button>
+      <button class="sbtn sbtn-fs" onclick="setFont(18,this)" style="font-size:16px">A</button>
+      <button class="sbtn sbtn-fs" onclick="setFont(22,this)" style="font-size:20px">A</button>
+    </div>
+  </div>
+  <div class="sg" style="display:flex;align-items:center;justify-content:space-between">
+    <label style="margin:0">Reading Ruler</label>
+    <input type="checkbox" id="ruler-toggle" onchange="toggleRuler()" style="width:18px;height:18px;cursor:pointer;accent-color:var(--accent)">
+  </div>
+  <div class="sg" style="border-top:1px solid var(--border);padding-top:12px;margin-top:2px">
+    <button onclick="restartTest()" style="width:100%;background:linear-gradient(135deg,#c0392b,#a93226);color:#fff;border:none;padding:9px;border-radius:7px;cursor:pointer;font-size:13px;font-weight:700;letter-spacing:.3px">🔄 Restart Test</button>
+  </div>
+</div>
+
+<div id="ruler"></div>
+
+<!-- MAIN -->
+<div id="main">
+  <div id="passage-panel"><div id="scroll-bar"></div><div id="passage-content"></div></div>
+  <div id="splitter"></div>
+  <div id="questions-panel"><div id="questions-content"></div></div>
+</div>
+
+<button id="back-to-results" onclick="backToResults()">← Back to Results</button>
+
+<!-- NOTES -->
+<button id="notes-toggle" onclick="toggleNotes()" title="Notes (Ctrl+N)">📝</button>
+<div id="notes-box">
+  <h4>📝 Scratch Notes &nbsp;<span style="opacity:.45;font-size:10px">Ctrl+N</span></h4>
+  <textarea id="notes-ta" placeholder="Type notes here..." oninput="saveNotes()"></textarea>
+</div>
+
+<!-- PALETTE -->
+<div id="palette-bar">
+  <span class="pal-label">Q:</span>
+  <div id="palette-nums" style="display:flex;flex-direction:row;flex-wrap:nowrap;gap:3px;align-items:center"></div>
+  <div class="pal-legend" style="margin-left:6px">
+    <span class="pal-dot" style="background:var(--palette-done)"></span>Done&nbsp;
+    <span class="pal-dot" style="background:var(--palette-flag)"></span>Flag
+  </div>
+  <button id="submit-btn" onclick="submitTest()">✔ Submit Test</button>
+</div>
+
+<!-- RESULTS -->
+<div id="results-screen">
+  <div class="res-header">
+    <div style="font-size:18px;font-weight:800;color:var(--accent);margin-bottom:10px">IELTS</div>
+    <h1>IELTS Academic Reading — Results (Test 8)</h1>
+    <div class="band-circle">
+      <div class="band-num" id="res-band">—</div>
+      <div class="band-lbl">Band</div>
+    </div>
+    <div class="band-desc" id="res-band-desc"></div>
+    <div class="band-note">Reading band estimate based on raw score. Actual scores may vary by test version.</div>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-val" id="res-correct">—</div><div class="stat-lbl">Correct</div></div>
+    <div class="stat-card"><div class="stat-val" id="res-wrong">—</div><div class="stat-lbl">Incorrect</div></div>
+    <div class="stat-card"><div class="stat-val" id="res-skip">—</div><div class="stat-lbl">Skipped</div></div>
+    <div class="stat-card"><div class="stat-val" id="res-pct">—</div><div class="stat-lbl">Accuracy</div></div>
+  </div>
+  <div class="p-breakdown" id="p-breakdown"></div>
+  <div class="review-section">
+    <h3>Detailed Review</h3>
+    <div class="review-grid" id="review-grid"></div>
+  </div>
+  <div class="res-actions">
+    <button class="res-btn res-btn-primary" onclick="reviewMode()">📖 Review Answers</button>
+    <button class="res-btn res-btn-secondary" onclick="restartTest()">🔄 New Attempt</button>
+    <a class="tg-btn" href="https://t.me/mockieltstest" target="_blank">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 13.617l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.828.942z"/></svg>
+      More Tests on Telegram
+    </a>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// PASSAGE DATA
+// ═══════════════════════════════════════════
+const PASSAGES=[
+{
+  title:'READING PASSAGE 1',
+  heading:'Listening to the Ocean',
+  subheading:'',
+  timeHint:'You should spend about 20 minutes on Questions 1–13.',
+  qRange:[1,13],
+  paragraphs:[
+    {label:'A',text:`The oceans of Earth cover more than 70 percent of the planet's surface, yet, until quite recently, we knew less about their depths than we did about the surface of the Moon. Distant as it is, the Moon has been far more accessible to study because astronomers long have been able to look at its surface, first with the naked eye and then with the telescope — both instruments that focus light. And, with telescopes tuned to different wavelengths of light, modern astronomers can not only analyze Earth's atmosphere, but also determine the temperature and composition of the Sun or other stars many hundreds of light-years away. Until the twentieth century, however, no analogous instruments were available for the study of Earth's oceans: Light, which can travel trillions of miles through the vast vacuum of space, cannot penetrate very far in seawater.`},
+    {label:'B',text:`Curious investigators long have been fascinated by sound and the way it travels in water. As early as 1490, Leonardo da Vinci observed: "If you cause your ship to stop and place the head of a long tube in the water and place the outer extremity to your ear, you will hear ships at a great distance from you." In 1687, the first mathematical theory of sound propagation was published by Sir Isaac Newton in his <em>Philosophiae Naturalis Principia Mathematica</em>. Investigators were measuring the speed of sound in air beginning in the mid-seventeenth century, but it was not until 1826 that Daniel Colladon, a Swiss physicist, and Charles Sturm, a French mathematician, accurately measured its speed in water. Using a long tube to listen underwater (as da Vinci had suggested), they recorded how fast the sound of a submerged bell traveled across Lake Geneva. Their result — 1,435 meters per second in water of 1.8 degrees Celsius — was only 3 meters per second off from the speed accepted today. What these investigators demonstrated was that water — whether fresh or salt — is an excellent medium for sound, transmitting it almost five times faster than its speed in air.`},
+    {label:'C',text:`In 1877 and 1878, the British scientist John William Strutt, third Baron Rayleigh, published his two-volume seminal work, <em>The Theory of Sound</em>, often regarded as marking the beginning of the modern study of acoustics. The recipient of the Nobel Prize for Physics in 1904 for his successful isolation of the element argon, Lord Rayleigh made key discoveries in the fields of acoustics and optics that are critical to the theory of wave propagation in fluids. Among other things, Lord Rayleigh was the first to describe a sound wave as a mathematical equation (the basis of all theoretical work on acoustics) and the first to describe how small particles in the atmosphere scatter certain wavelengths of sunlight, a principle that also applies to the behavior of sound waves in water.`},
+    {label:'D',text:`A number of factors influence how far sound travels underwater and how long it lasts. For one, particles in seawater can reflect, scatter, and absorb certain frequencies of sound — just as certain wavelengths of light may be reflected, scattered, and absorbed by specific types of particles in the atmosphere. Seawater absorbs 30 times the amount of sound absorbed by distilled water, with specific chemicals (such as magnesium sulfate and boric acid) damping out certain frequencies of sound. Researchers also learned that low-frequency sounds, whose long wavelengths generally pass over tiny particles, tend to travel farther without loss through absorption or scattering. Further work on the effects of salinity, temperature, and pressure on the speed of sound has yielded fascinating insights into the structure of the ocean. Speaking generally, the ocean is divided into horizontal layers in which sound speed is influenced more greatly by temperature in the upper regions and by pressure in the lower depths. At the surface is a sun-warmed upper layer, the actual temperature and thickness of which varies with the season. At mid-latitudes, this layer tends to be isothermal — the temperature tends to be uniform throughout the layer because the water is well mixed by the action of waves, winds, and convection currents; a sound signal moving down through this layer tends to travel at an almost constant speed. Next comes a transitional layer called the thermocline, in which temperature drops steadily with depth; as the temperature falls, so does the speed of sound.`},
+    {label:'E',text:`The U.S. Navy was quick to appreciate the usefulness of low-frequency sound and the deep sound channel in extending the range at which it could detect submarines. In great secrecy during the 1950s, the U.S. Navy launched a project that went by the code name Jezebel; it would later come to be known as the Sound Surveillance System (SOSUS). The system involved arrays of underwater microphones, called hydrophones, that were placed on the ocean bottom and connected by cables to onshore processing centers. With SOSUS deployed in both deep and shallow waters along both coasts of North America and the British West Indies, the U.S. Navy not only could detect submarines in much of the northern hemisphere, it also could distinguish how many propellers a submarine had, whether it was conventional or nuclear, and sometimes even the class of sub.`},
+    {label:'F',text:`The realization that SOSUS could be used to listen to whales also was made by Christopher Clark, a biological acoustician at Cornell University, when he first visited a SOSUS station in 1992. When Clark looked at the graphic representations of sound, scrolling 24 hours a day, every day, he saw the voice patterns of blue, finback, minke, and humpback whales. He also could hear the sounds. Using a SOSUS receiver in the West Indies, he could hear whales that were 1,770 kilometers (1,100 miles) away. Whales are the biggest of Earth's creatures. Using the SOSUS stations, scientists can track the whales in real time and position them on a map. Moreover, they can track not just one whale at a time, but many creatures simultaneously throughout the North Atlantic and the eastern North Pacific. They also can learn to distinguish whale calls. For example, Fox and colleagues have detected changes in the calls of finback whales during different seasons and have found that blue whales in different regions of the Pacific Ocean have different calls.`},
+    {label:'G',text:`SOSUS, with its vast reach, also has proved instrumental in obtaining information crucial to our understanding of Earth's weather and climate. Specifically, the system has enabled researchers to begin making ocean temperature measurements on a global scale — measurements that are keys to puzzling out the workings of heat transfer between the ocean and the atmosphere. The ocean plays an enormous role in determining air temperature; the heat capacity in only the upper few meters of ocean is thought to be equal to all of the heat in the entire atmosphere. For sound waves traveling horizontally in the ocean, speed is largely a function of temperature. Thus, the travel time of a wave of sound between two points is a sensitive indicator of the average temperature along its path. Transmitting sound in numerous directions through the deep sound channel can give scientists measurements spanning vast areas of the globe. Thousands of sound paths in the ocean could be pieced together into a map of global ocean temperatures and, by repeating measurements along the same paths over time, scientists could track changes in temperature over months or years.`},
+    {label:'H',text:`Researchers also are using other acoustic techniques to monitor climate. Oceanographer Jeff Nystuen at the University of Washington, for example, has explored the use of sound to measure rainfall over the ocean. Monitoring changing global rainfall patterns undoubtedly will contribute to understanding major climate change as well as the weather phenomenon known as El Niño. Since 1985, Nystuen has used hydrophones to listen to rain over the ocean, acoustically measuring not only the rainfall rate but also the rainfall type, from drizzle to thunderstorms. By using the sound of rain underwater as a "natural" rain gauge, the measurement of rainfall over the oceans will become available to climatologists.`},
+  ]
+},
+{
+  title:'READING PASSAGE 2',
+  heading:'The Beginning of the Consumer Age',
+  subheading:'How the public became mass consumers in the late 19th and early 20th centuries.',
+  timeHint:'You should spend about 20 minutes on Questions 14–26.',
+  qRange:[14,26],
+  paragraphs:[
+    {label:'A',text:`By 1900 all major industrialised countries had become aware of the importance not only of production, but also of the consumption of goods by their citizens. As a result, a culture of consumption emerged, and this played an important role in the shaping of a country's social and economic identity. One feature of this new culture was a heightened awareness of social status and a strong desire at all levels to show off newly acquired wealth. New aspirations were expressed most visibly through the acquisition of consumer goods, and the concept of style became increasingly significant as a measure of social status.`},
+    {label:'B',text:`One of the ways in which manufacturers tried to encourage consumption was by identifying a particular market and deliberately making their goods look attractive to potential customers. However, the dissemination of goods to a mass market depended on more than the efforts of manufacturers and designers to inject style into products. It also required a whole network of activities and institutions. These included changes in production methods so that more goods could be manufactured; the development of new kinds of retail outlets; and the expansion of advertising to promote sales. The introduction of a credit system of buying, initiated by the Singer Sewing Machine Company in the US in the 1860s and later adopted elsewhere by furniture and electrical appliance manufacturers, also went a long way towards making more goods available to more people.`},
+    {label:'C',text:`There were also changes to the selling environment. The department stores established in the second half of the 19th century — Bon Marché in Paris, Macy's in New York, Harvey Nichols in London — were joined, about the turn of the century, by multi-branch retailers appealing to the lower end of the market, such as John Jacob's furniture stores in England. In US department stores, interior areas expanded and large shop windows were introduced to show off new products to their best advantage. Electric lighting increased their visual appeal. This idea was pioneered in 1877 by the US store-owner John Wanamaker, who persuaded inventor Thomas Edison to install electricity in his Philadelphia department store.`},
+    {label:'D',text:`In the United States where there were large distances between urban centres, mail order became a vital means whereby the rural population could acquire goods that they would not otherwise have been able to buy. Chicago entrepreneur Montgomery Ward launched the concept producing a single-sheet mail-order catalogue in 1872. Three years later, his catalogue had nearly four thousand items listed on it. Businessman Richard Sears followed suit in 1891, and together with partner Alvah C. Roebuck, moved on to develop the largest mail-order company of the 20th century.`},
+    {label:'E',text:`By the end of the 19th century, consumer culture had taken root in industrialized countries and was changing the way people lived and perceived their own status. People were becoming increasingly conscious of their own status, which was expressed through the acquisition of consumer goods and the concept of style. In response, manufacturers began to create goods that were more appealing to the public and retailers expanded their advertising and sales efforts.`},
+    {label:'F',text:`Retail stores adapted to meet the demands of consumers, with large department stores opening in major cities and multi-branch retailers appealing to the lower end of the market. The selling environment was changed with large shop windows, electric lighting, and the expansion of interior areas to showcase goods. Additionally, mail-order catalogues became popular in the United States as a way for rural populations to access goods they wouldn't otherwise have access to. These developments helped to drive the growth of consumer culture and the associated economy.`},
+  ]
+},
+{
+  title:'READING PASSAGE 3',
+  heading:'Digital Diet',
+  subheading:'',
+  timeHint:'You should spend about 20 minutes on Questions 27–40.',
+  qRange:[27,40],
+  paragraphs:[
+    {label:'A',text:`Telecommuting, Internet shopping and online meetings may save energy as compared with in-person alternatives, but as the digital age moves on, its green reputation is turning a lot browner. E-mailing, number crunching and Web searches in the U.S. consumed as much as 61 billion kilowatt-hours last year, or 1.5 per cent of the nation's electricity — half of which comes from coal. In 2005 the computers of the world ate up 123 billion kilowatt-hours of energy, a number that will double by 2010 if present trends continue, according to Jonathan Koomey, a staff scientist at Lawrence Berkeley National Laboratory. As a result, the power bill to run a computer over its lifetime will surpass the cost of buying the machine in the first place, giving Internet and computer companies a business reason to cut energy costs, as well as an environmental one.`},
+    {label:'B',text:`One of the biggest energy sinks comes not from the computers themselves but from the air-conditioning needed to keep them from overheating. For every kilowatt-hour of energy used for computing in a data centre, another kilowatt-hour is required to cool the furnace-like racks of servers.`},
+    {label:'C',text:`For Internet giant Google, this reality has driven efforts such as the installation of a solar array that can provide 30 per cent of the peak power needs of its Mountain View, Calif., headquarters as well as increased purchases of renewable energy. But to deliver Web pages within seconds, the firm must maintain hundreds of thousands of computer servers in cavernous buildings. "It's a good thing to worry about server energy efficiency," remarks Google's green energy czar Bill Weihl. "We are actively working to maximize the efficiency of our data centres, which account for most of the energy Google consumes worldwide." Google will funnel some of its profits into a new effort, dubbed RE&lt;C (for renewable energy cheaper than coal) to make sources such as solar-thermal, high-altitude wind and geothermal cheaper than coal "within years, not decades," according to Weihl.`},
+    {label:'D',text:`In the meantime, the industry as a whole has employed a few tricks to save watts. Efforts include cutting down on the number of transformations the electricity itself must undergo before achieving the correct operating voltage; rearranging the stacks of servers and the mechanics of their cooling; and using software to create multiple "virtual" computers, rather than having to deploy several real ones. Such virtualization has allowed computer maker Hewlett-Packard to consolidate 86 data centers spread throughout the world to just three, with three backups, says Pat Tiernan, the firm's vice president of social and environmental responsibility.`},
+    {label:'E',text:`The industry is also tackling the energy issue at the computer-chip level. With every doubling of processing power in recent years has come a doubling in power consumption. But to save energy, chipmakers such as Intel and AMD have shifted to so-called multicore technology, which packs multiple processors into one circuit rather than separating them. "When we moved to multicore — away from a linear focus on megahertz and gigahertz — and throttled down microprocessors, the energy savings were pretty substantial," says Allyson Klein, Intel's marketing manager for its Ecotech Initiative. Chipmakers continue to shrink circuits on the nanoscale as well, which means a chip needs less electricity to deliver the same performance, she adds.`},
+    {label:'F',text:`With such chips, more personal computers will meet various efficiency standards, such as Energy Star compliance (which mandates that a desktop consume no more than 65 watts). The federal government, led by agencies such as NASA and the Department of Defense, may soon require all their purchases to meet the Electronic Product Environmental Assessment Tool standard. And Google, Intel and others have formed the Climate Savers Computing Initiative, an effort to cut power consumption from all computers by 50 per cent by 2010.`},
+    {label:'G',text:`Sleep modes and other power management tools built into most operating systems can offer savings today. Yet about 90 per cent of computers do not have such settings enabled, according to Klein. Properly activated, they would prevent a computer from leading to the emission of thousands of kilograms of carbon dioxide from power plants every year. But if powering down or unplugging the computer is not an option, then perhaps the most environmentally friendly use of all those wasted computing cycles is in helping to model climate change. The University of Oxford's ClimatePrediction.net offers an opportunity to at least predict the consequences of all that coal burning.`},
+    {label:'H',text:`CO2 Stats is a free tool that can be embedded into any Website to calculate the carbon dioxide emissions associated with using it. That estimate is based on an assumption of 300 watts of power consumed by the personal computer, network and server involved — or 16.5 milligrams of CO2 emitted every second of use. "The typical carbon footprint is roughly equivalent to 1.5 people breathing," says physicist Alexander Wissner-Gross of Harvard University, who co-created the Web tool.`},
+  ]
+}
+];
+
+// ═══════════════════════════════════════════
+// BANKS
+// ═══════════════════════════════════════════
+// Passage 1: paragraph bank Q5-8
+const PARA_P1=[
+  {letter:'A',word:'Paragraph A'},{letter:'B',word:'Paragraph B'},
+  {letter:'C',word:'Paragraph C'},{letter:'D',word:'Paragraph D'},
+  {letter:'E',word:'Paragraph E'},{letter:'F',word:'Paragraph F'},
+  {letter:'G',word:'Paragraph G'},{letter:'H',word:'Paragraph H'}
+];
+
+// Passage 2: headings bank Q14-19
+const HEADINGS_P2=[
+  {letter:'i',word:'The emergence of consumer culture and its impact on social and economic culture'},
+  {letter:'ii',word:'The strategies adopted by manufacturers to promote consumption'},
+  {letter:'iii',word:'The expansion of retail networks to meet market demands'},
+  {letter:'iv',word:'The innovations in the selling environment to enhance product presentation'},
+  {letter:'v',word:'The significance of mail order in bridging the rural-urban divide'},
+  {letter:'vi',word:'The interplay of social aspirations, consumer goods, and style in shaping consumer culture'},
+  {letter:'vii',word:'The proliferation of credit systems and its impact on widespread availability of goods'},
+  {letter:'viii',word:'The development of large department stores and multi-branch retailers to cater to a wider market'},
+  {letter:'ix',word:'The underlying drivers behind the growth of consumer culture and its economy'}
+];
+
+// Passage 3: people bank Q27-32
+const PEOPLE_P3=[
+  {letter:'A',word:'Jonathan Koomey'},
+  {letter:'B',word:'Allyson Klein'},
+  {letter:'C',word:'Pat Tiernan'},
+  {letter:'D',word:'Bill Weihl'},
+  {letter:'E',word:'Alexander Wissner-Gross'}
+];
+
+// ═══════════════════════════════════════════
+// QUESTIONS
+// ═══════════════════════════════════════════
+const QUESTIONS=[
+// ── PASSAGE 1 ──────────────────────────────
+// Q1-4: TRUE/FALSE/NOT GIVEN
+{id:1,passage:0,type:'tfng',
+ instruction:'Questions 1–4: TRUE / FALSE / NOT GIVEN',
+ text:'In the past, research on the Moon was much easier than it is now.',
+ answer:'TRUE',
+ hint:'Paragraph A says we knew more about the Moon\'s surface than ocean depths — the Moon was "far more accessible to study" with telescopes. Past research was easier (not harder) than ocean research.'},
+
+{id:2,passage:0,type:'tfng',instruction:'',
+ text:'The same light technology used in the investigation of the Moon can be employed in the study of the ocean.',
+ answer:'FALSE',
+ hint:'Paragraph A: "Light... cannot penetrate very far in seawater" — so the light-based technology used for the Moon cannot be used for oceans.'},
+
+{id:3,passage:0,type:'tfng',instruction:'',
+ text:'Research on the depth of the ocean by the method of sound waves is more time-consuming.',
+ answer:'NOT GIVEN',
+ hint:'The passage discusses sound waves being used to study the ocean but never compares this approach to others in terms of time required.'},
+
+{id:4,passage:0,type:'tfng',instruction:'',
+ text:'Hydrophones technology is able to detect the category of precipitation.',
+ answer:'TRUE',
+ hint:'Paragraph H: Nystuen used hydrophones to measure "not only the rainfall rate but also the rainfall type, from drizzle to thunderstorms" — detecting precipitation category.'},
+
+// Q5-8: Which paragraph A-H
+{id:5,passage:0,type:'fill',
+ instruction:'Questions 5–8: Which paragraph A–H contains the following information? You may use any letter more than once.',
+ text:'Elements that affect sound transmission in the ocean.',
+ answers:['d','D'],answer:'D',
+ hint:'Paragraph D discusses the multiple factors (salinity, temperature, pressure, chemicals) that affect how sound travels underwater.'},
+
+{id:6,passage:0,type:'fill',instruction:'',
+ text:'Relationship between global climate and ocean temperature.',
+ answers:['g','G'],answer:'G',
+ hint:'Paragraph G: "the system has enabled researchers to begin making ocean temperature measurements on a global scale — measurements that are keys to puzzling out the workings of heat transfer between the ocean and the atmosphere."'},
+
+{id:7,passage:0,type:'fill',instruction:'',
+ text:'Examples of how sound technology helps people research oceans and creatures in it.',
+ answers:['f','F'],answer:'F',
+ hint:'Paragraph F describes how SOSUS is used to track and study whales — a clear example of sound technology helping ocean/creature research.'},
+
+{id:8,passage:0,type:'fill',instruction:'',
+ text:'Sound transmission underwater is similar to that of light in any condition.',
+ answers:['d','D'],answer:'D',
+ hint:'Paragraph D: "particles in seawater can reflect, scatter, and absorb certain frequencies of sound — just as certain wavelengths of light may be reflected, scattered, and absorbed." The similarity is described here.'},
+
+// Q9-13: MCQ
+{id:9,passage:0,type:'mcq',
+ instruction:'Questions 9–13: Choose the correct letter A, B, C or D.',
+ text:'Who of the following is dedicated to research on the rate/speed of sound?',
+ answer:'D',
+ options:[
+   'A. Leonardo da Vinci',
+   'B. Isaac Newton',
+   'C. John William Strutt',
+   'D. Charles Sturm'
+ ],
+ hint:'Charles Sturm (with Colladon) accurately measured the speed of sound in water in 1826 — the first to do so. Da Vinci observed, Newton published theory, Strutt described sound mathematically. Sturm = speed measurement.'},
+
+{id:10,passage:0,type:'mcq',instruction:'',
+ text:'Who explained that the theory of light or sound wavelength is significant in water?',
+ answer:'A',
+ options:[
+   'A. Lord Rayleigh',
+   'B. John William Strutt',
+   'C. Charles Sturm',
+   'D. Christopher Clark'
+ ],
+ hint:'Lord Rayleigh (= John William Strutt, but the answer key says A = Lord Rayleigh as the answer) described how particles scatter wavelengths of sunlight — "a principle that also applies to the behavior of sound waves in water."'},
+
+{id:11,passage:0,type:'mcq',instruction:'',
+ text:'According to Fox and colleagues, in what pattern does the change of finback whale calls happen?',
+ answer:'A',
+ options:[
+   'A. Change in various seasons',
+   'B. Change in various days',
+   'C. Change in different months',
+   'D. Change in different years'
+ ],
+ hint:'Paragraph F: "Fox and colleagues have detected changes in the calls of finback whales during different seasons."'},
+
+{id:12,passage:0,type:'mcq',instruction:'',
+ text:'In which way does the SOSUS technology inspect whales?',
+ answer:'B',
+ options:[
+   'A. Track all kinds of whales in the ocean',
+   'B. Track bunches of whales at the same time',
+   'C. Track only finback whales in the ocean',
+   'D. Track whales by using multiple appliances or devices'
+ ],
+ hint:'Paragraph F: "they can track not just one whale at a time, but many creatures simultaneously" — tracking multiple/bunches at the same time = B.'},
+
+{id:13,passage:0,type:'mcq',instruction:'',
+ text:'What could scientists inspect via monitoring along a repeated route?',
+ answer:'C',
+ options:[
+   'A. Temperature of the surface passed',
+   'B. Temperature of the deepest ocean floor',
+   'C. Variation of temperature',
+   'D. Fixed data of temperature'
+ ],
+ hint:'Paragraph G: "by repeating measurements along the same paths over time, scientists could track changes in temperature over months or years" — tracking changes = variation of temperature = C.'},
+
+// ── PASSAGE 2 ──────────────────────────────
+// Q14-19: Paragraph headings i-ix
+{id:14,passage:1,type:'fill',
+ instruction:'Questions 14–19: Choose the correct heading i–ix for each paragraph A–F.',
+ text:'Paragraph A',
+ answers:['i'],answer:'i',
+ hint:'Paragraph A describes the emergence of consumer culture and its role in social and economic identity — heading i.'},
+
+{id:15,passage:1,type:'fill',instruction:'',
+ text:'Paragraph B',
+ answers:['ii'],answer:'ii',
+ hint:'Paragraph B covers strategies manufacturers used: targeting markets, credit systems, advertising — heading ii.'},
+
+{id:16,passage:1,type:'fill',instruction:'',
+ text:'Paragraph C',
+ answers:['iv'],answer:'iv',
+ hint:'Paragraph C describes changes to the selling environment: large windows, electric lighting, expanded interiors — heading iv.'},
+
+{id:17,passage:1,type:'fill',instruction:'',
+ text:'Paragraph D',
+ answers:['v'],answer:'v',
+ hint:'Paragraph D is entirely about mail-order catalogues bridging rural and urban America — heading v.'},
+
+{id:18,passage:1,type:'fill',instruction:'',
+ text:'Paragraph E',
+ answers:['vi'],answer:'vi',
+ hint:'Paragraph E discusses social aspirations and status expressed through consumer goods and style — heading vi.'},
+
+{id:19,passage:1,type:'fill',instruction:'',
+ text:'Paragraph F',
+ answers:['ix'],answer:'ix',
+ hint:'Paragraph F summarises the underlying drivers — retail adaptation, shop environments, mail order — that drove consumer culture growth — heading ix.'},
+
+// Q20-24: Sentence fill ONE WORD ONLY
+{id:20,passage:1,type:'fill',
+ instruction:'Questions 20–24: Complete the sentences below. Choose ONE WORD ONLY from the passage for each answer.',
+ text:'By 1900, all industrialized countries were aware of the importance of both _______ and consumption.',
+ answers:['production'],answer:'production',
+ hint:'Paragraph A: "the importance not only of production, but also of the consumption of goods."'},
+
+{id:21,passage:1,type:'fill',instruction:'',
+ text:'The culture of consumption played a crucial role in shaping a country\'s _______ and economic identity.',
+ answers:['social'],answer:'social',
+ hint:'Paragraph A: "an important role in the shaping of a country\'s social and economic identity."'},
+
+{id:22,passage:1,type:'fill',instruction:'',
+ text:'People expressed their newly acquired wealth through the acquisition of _______ goods.',
+ answers:['consumer'],answer:'consumer',
+ hint:'Paragraph A: "expressed most visibly through the acquisition of consumer goods."'},
+
+{id:23,passage:1,type:'fill',instruction:'',
+ text:'The dissemination of goods to a mass market required a network of activities and _______ .',
+ answers:['institutions'],answer:'institutions',
+ hint:'Paragraph B: "a whole network of activities and institutions."'},
+
+{id:24,passage:1,type:'fill',instruction:'',
+ text:'John Wanamaker was the first to use _______ in his department store to increase the visual appeal of goods.',
+ answers:['electricity'],answer:'electricity',
+ hint:'Paragraph C: "who persuaded inventor Thomas Edison to install electricity in his Philadelphia department store."'},
+
+// Q25-26: Choose TWO A-E
+{id:25,passage:1,type:'multi2',
+ instruction:'Questions 25–26: Choose TWO letters A–E. Which of the following played a role in the development of consumer culture in industrialized countries?',
+ text:'Select TWO correct answers.',
+ answer:'DE',
+ options:[
+   'A. The Singer Sewing Machine Company',
+   'B. The department stores established in the second half of the 19th century',
+   'C. The large distances between urban centers',
+   'D. The expansion of interior areas in retail stores',
+   'E. The four thousand items listed in a mail-order catalog'
+ ],
+ hint:'Answer key: D and E. D = expansion of interior areas in stores (Paragraph C). E = 4,000-item catalogue = mail-order catalogue helping consumer culture (Paragraph D).'},
+
+// ── PASSAGE 3 ──────────────────────────────
+// Q27-32: Match people A-E
+{id:27,passage:2,type:'fill',
+ instruction:'Questions 27–32: Match each statement with the correct person A–E. You may use any letter more than once.',
+ text:'Figuring ways to optimise the utilisation of energy in certain significant departments in the company.',
+ answers:['d','D'],answer:'D',
+ hint:'Bill Weihl (D): "We are actively working to maximize the efficiency of our data centres, which account for most of the energy Google consumes worldwide."'},
+
+{id:28,passage:2,type:'fill',instruction:'',
+ text:'A revolutionary improvement in a tiny but quite imperative component of computers.',
+ answers:['b','B'],answer:'B',
+ hint:'Allyson Klein (B) describes the shift to multicore technology and shrinking circuits at the nanoscale — improvements to the computer chip.'},
+
+{id:29,passage:2,type:'fill',instruction:'',
+ text:'Targeting at developing alternative energy sources within the near future.',
+ answers:['d','D'],answer:'D',
+ hint:'Bill Weihl (D): Google\'s RE&lt;C effort aims to make renewable energy cheaper than coal "within years, not decades."'},
+
+{id:30,passage:2,type:'fill',instruction:'',
+ text:'An astounding estimate on the energy to be consumed by computers in a short period based on an unchangeable trend.',
+ answers:['a','A'],answer:'A',
+ hint:'Jonathan Koomey (A): predicted that 123 billion kilowatt-hours "will double by 2010 if present trends continue."'},
+
+{id:31,passage:2,type:'fill',instruction:'',
+ text:'A powerful technique developed for the integration of resources.',
+ answers:['c','C'],answer:'C',
+ hint:'Pat Tiernan (C) describes virtualization allowing HP to consolidate 86 data centers worldwide into just three — powerful integration technique.'},
+
+{id:32,passage:2,type:'fill',instruction:'',
+ text:'A failure for the vast majority of computers to activate internal tools already available in them.',
+ answers:['b','B'],answer:'B',
+ hint:'Allyson Klein (B): "about 90 per cent of computers do not have such settings [sleep modes/power management] enabled."'},
+
+// Q33-36: TRUE/FALSE/NOT GIVEN
+{id:33,passage:2,type:'tfng',
+ instruction:'Questions 33–36: TRUE / FALSE / NOT GIVEN',
+ text:'Cooling the servers does not take up a considerable amount of the energy needed for the computer.',
+ answer:'FALSE',
+ hint:'Paragraph B: "For every kilowatt-hour of energy used for computing in a data centre, another kilowatt-hour is required to cool the furnace-like racks of servers." — an equal amount is needed, which IS considerable.'},
+
+{id:34,passage:2,type:'tfng',instruction:'',
+ text:'It seems that the number of servers has a severe impact on the speed of the internet connection.',
+ answer:'TRUE',
+ hint:'Paragraph C: "to deliver Web pages within seconds, the firm must maintain hundreds of thousands of computer servers" — the server count directly affects delivery speed.'},
+
+{id:35,passage:2,type:'tfng',instruction:'',
+ text:'Several companies from other fields have a joint effort with the internet industry to work on ways to save energy.',
+ answer:'NOT GIVEN',
+ hint:'The passage mentions Google, Intel and others forming the Climate Savers Computing Initiative, but these are all tech companies. No mention of companies from OTHER fields joining.'},
+
+{id:36,passage:2,type:'tfng',instruction:'',
+ text:'Actions taken at a governmental level are to be expected to help with savings in energy in the near future.',
+ answer:'TRUE',
+ hint:'Paragraph F: "The federal government, led by agencies such as NASA and the Department of Defense, may soon require all their purchases to meet the Electronic Product Environmental Assessment Tool standard."'},
+
+// Q37-40: Summary fill (NO MORE THAN THREE WORDS)
+{id:37,passage:2,type:'fill',
+ instruction:'Questions 37–40: Complete the summary. Choose NO MORE THAN THREE WORDS from the passage for each answer.',
+ text:'The _______ has also been reached to save up energy in every possible way.',
+ answers:['computer-chip level','computer chip level'],answer:'computer-chip level',
+ hint:'Paragraph E: "The industry is also tackling the energy issue at the computer-chip level."'},
+
+{id:38,passage:2,type:'fill',instruction:'',
+ text:'Some firms have switched to _______ which means several processors are integrated into one single circuit.',
+ answers:['so-called multicore technology','multicore technology'],answer:'so-called multicore technology',
+ hint:'Paragraph E: "chipmakers... have shifted to so-called multicore technology, which packs multiple processors into one circuit."'},
+
+{id:39,passage:2,type:'fill',instruction:'',
+ text:'They also _______ on an even more delicate level for chips to save more energy.',
+ answers:['shrink circuits'],answer:'shrink circuits',
+ hint:'Paragraph E: "Chipmakers continue to shrink circuits on the nanoscale."'},
+
+{id:40,passage:2,type:'fill',instruction:'',
+ text:'While staying at a constant level in terms of the _______ .',
+ answers:['performance'],answer:'performance',
+ hint:'Paragraph E: "a chip needs less electricity to deliver the same performance."'},
+];
+
+const BAND_TABLE=[
+  {min:39,max:40,band:9,desc:'Expert User'},{min:37,max:38,band:8.5,desc:'Very Good User'},
+  {min:35,max:36,band:8,desc:'Very Good User'},{min:33,max:34,band:7.5,desc:'Good User'},
+  {min:30,max:32,band:7,desc:'Good User'},{min:27,max:29,band:6.5,desc:'Competent User'},
+  {min:23,max:26,band:6,desc:'Competent User'},{min:19,max:22,band:5.5,desc:'Modest User'},
+  {min:15,max:18,band:5,desc:'Modest User'},{min:13,max:14,band:4.5,desc:'Limited User'},
+  {min:10,max:12,band:4,desc:'Limited User'},{min:8,max:9,band:3.5,desc:'Extremely Limited'},
+  {min:6,max:7,band:3,desc:'Extremely Limited'},{min:4,max:5,band:2.5,desc:'Intermittent User'}
+];
+
+// ═══════════════════════════════════════════
+// ANSWER GRADING
+// ═══════════════════════════════════════════
+function normalise(str){
+  return str.toLowerCase().trim()
+    .replace(/[-–—]/g,' ').replace(/\s+/g,' ').replace(/\.$/,'');
+}
+const NUM_MAP={'one':'1','two':'2','three':'3','four':'4','five':'5',
+  'six':'6','seven':'7','eight':'8','nine':'9','ten':'10',
+  '1':'one','2':'two','3':'three','4':'four','5':'five',
+  '6':'six','7':'seven','8':'eight','9':'nine','10':'ten'};
+function expandNums(str){
+  return str.replace(/\b(\w+)\b/g,w=>NUM_MAP[w.toLowerCase()]||w);
+}
+function isCorrect(q,userAnswer){
+  if(q.type==='multi2'){
+    if(!userAnswer||!userAnswer.trim())return false;
+    const ua=userAnswer.toUpperCase().split('').sort().join('');
+    const ca=(q.answer||'').toUpperCase().split('').sort().join('');
+    return ua===ca;
+  }
+  if(!userAnswer||!userAnswer.trim())return false;
+  const ua=normalise(userAnswer);
+  const accepted=[];
+  if(q.answers)q.answers.forEach(a=>accepted.push(normalise(a)));
+  else{
+    accepted.push(normalise(q.answer));
+    if(q.altAnswer)accepted.push(normalise(q.altAnswer));
+  }
+  for(const a of accepted){
+    if(ua===a)return true;
+    if(expandNums(ua)===a||ua===expandNums(a))return true;
+  }
+  return false;
+}
+
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+let currentPassage=0,answers={},flags={},timerSec=3600,
+    timerInt=null,testDone=false,reviewModeOn=false;
+
+// ═══════════════════════════════════════════
+// BEGIN TEST
+// ═══════════════════════════════════════════
+function beginTest(){
+  document.getElementById('start-screen').style.display='none';
+  loadSaved();
+  renderPassage(0);renderQuestions(0);buildPalette();startTimer();initScrollProgress();
+}
+
+// ═══════════════════════════════════════════
+// INIT (theme only before test starts)
+// ═══════════════════════════════════════════
+window.onload=()=>{
+  const th=localStorage.getItem('ielts_theme');
+  if(th==='dark'){
+    document.body.className='dark';
+    document.querySelectorAll('.sbtn[onclick*="setTheme"]').forEach((b,i)=>b.classList.toggle('active',i===1));
+  }
+  const sp=document.getElementById('splitter');
+  const pp=document.getElementById('passage-panel');
+  const qp=document.getElementById('questions-panel');
+  let drag=false;
+  sp.addEventListener('mousedown',e=>{drag=true;sp.classList.add('dragging');document.body.style.cursor='col-resize';document.body.style.userSelect='none';e.preventDefault();});
+  document.addEventListener('mousemove',e=>{
+    if(!drag)return;
+    const m=document.getElementById('main'),r=m.getBoundingClientRect();
+    const lw=Math.min(Math.max(e.clientX-r.left,220),r.width-234);
+    pp.style.flex='none';pp.style.width=lw+'px';
+    qp.style.flex='none';qp.style.width=(r.width-7-lw)+'px';
+    updateRulerWidth();
+  });
+  document.addEventListener('mouseup',()=>{if(!drag)return;drag=false;sp.classList.remove('dragging');document.body.style.cursor='';document.body.style.userSelect='';});
+  pp.addEventListener('mousemove',e=>{
+    const r=document.getElementById('ruler');
+    if(r.style.display==='block'){r.style.top=(e.clientY-14)+'px';updateRulerWidth();}
+  });
+  document.addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='n'){e.preventDefault();toggleNotes();}});
+  document.addEventListener('contextmenu',onContextMenu);
+  document.addEventListener('click',e=>{
+    hideCtx();
+    if(!document.getElementById('settings-panel').contains(e.target)&&!e.target.closest('.hbtn[onclick*="toggleSettings"]'))
+      document.getElementById('settings-panel').style.display='none';
+  });
+};
+
+function loadSaved(){
+  try{const s=localStorage.getItem('ielts_t8_answers');if(s)answers=JSON.parse(s);}catch(e){}
+  try{const f=localStorage.getItem('ielts_t8_flags');if(f)flags=JSON.parse(f);}catch(e){}
+  try{const n=localStorage.getItem('ielts_t8_notes');if(n)document.getElementById('notes-ta').value=n;}catch(e){}
+  try{const t=localStorage.getItem('ielts_t8_timer');if(t){const v=parseInt(t);if(v>0&&v<=3600)timerSec=v;}}catch(e){}
+}
+function saveAll(){
+  try{
+    localStorage.setItem('ielts_t8_answers',JSON.stringify(answers));
+    localStorage.setItem('ielts_t8_flags',JSON.stringify(flags));
+    localStorage.setItem('ielts_t8_timer',timerSec);
+  }catch(e){}
+}
+
+// ═══════════════════════════════════════════
+// RENDER PASSAGE
+// ═══════════════════════════════════════════
+function renderPassage(idx){
+  const p=PASSAGES[idx];
+  let h=`<div class="passage-meta">${p.title}</div>`;
+  if(p.timeHint)h+=`<div class="passage-time-hint">⏱ ${p.timeHint}</div>`;
+  h+=`<div class="passage-heading">${p.heading}</div>`;
+  if(p.subheading)h+=`<div class="passage-subheading">${p.subheading}</div>`;
+  h+=`<hr class="passage-divider"><div class="passage-text">`;
+  p.paragraphs.forEach(para=>{
+    h+=`<p>${para.label?`<span class="para-label">${para.label}</span>`:''}${para.text}</p>`;
+  });
+  h+=`</div>`;
+  if(p.footnote)h+=`<div class="footnote">${p.footnote}</div>`;
+  document.getElementById('passage-content').innerHTML=h;
+}
+
+// ═══════════════════════════════════════════
+// RENDER QUESTIONS
+// ═══════════════════════════════════════════
+function renderQuestions(pIdx){
+  const p=PASSAGES[pIdx];
+  const qs=QUESTIONS.filter(q=>q.passage===pIdx);
+  let h=`<div class="q-range-label">Questions ${p.qRange[0]}–${p.qRange[1]}</div>`;
+
+  let lastInstr='';
+  qs.forEach(q=>{
+    if(q.instruction&&q.instruction!==lastInstr){
+      h+=`<div class="q-section-title">${q.instruction}</div>`;
+      lastInstr=q.instruction;
+      // Passage 1: paragraph bank before Q5
+      if(pIdx===0 && q.id===5){
+        h+=renderParaBank();
+      }
+      // Passage 2: headings bank before Q14
+      if(pIdx===1 && q.id===14){
+        h+=renderHeadingsBank();
+      }
+      // Passage 3: people bank before Q27
+      if(pIdx===2 && q.id===27){
+        h+=renderPersonBank(PEOPLE_P3,'List of People — A, B, C, D or E (you may use any letter more than once)');
+      }
+    }
+    h+=renderQ(q);
+  });
+  document.getElementById('questions-content').innerHTML=h;
+}
+
+function renderPersonBank(people, title){
+  let h=`<div class="person-bank"><div class="person-bank-title">${title}</div><div class="person-bank-grid">`;
+  people.forEach(p=>{h+=`<div class="pb-item"><span class="pb-letter">${p.letter}</span><span>${p.word}</span></div>`;});
+  h+=`</div></div>`;return h;
+}
+
+function renderHeadingsBank(){
+  let h=`<div class="word-bank"><div class="word-bank-title">List of Headings — i to ix</div><div class="word-bank-grid">`;
+  HEADINGS_P2.forEach(item=>{h+=`<div class="wb-item"><span class="wb-letter">${item.letter}</span><span>${item.word}</span></div>`;});
+  h+=`</div></div>`;return h;
+}
+
+function renderParaBank(){
+  let h=`<div class="word-bank"><div class="word-bank-title">Paragraphs — A to H (you may use any letter more than once)</div><div class="word-bank-grid">`;
+  PARA_P1.forEach(item=>{h+=`<div class="wb-item"><span class="wb-letter">${item.letter}</span><span>${item.word}</span></div>`;});
+  h+=`</div></div>`;return h;
+}
+
+function renderQ(q){
+  const val=answers[q.id]||'';
+  const fl=!!flags[q.id];
+  let inner='';
+  if(q.type==='fill'){
+    inner=`<div class="q-text">${q.text}</div><input class="q-input" id="q${q.id}" type="text" value="${val.replace(/"/g,'&quot;')}" placeholder="Type your answer…" oninput="setAnswer(${q.id},this.value)">`;
+  }else if(q.type==='yesno'){
+    inner=`<div class="q-text">${q.text}</div><div class="tfng-btns">${['YES','NO','NOT GIVEN'].map(v=>`<button class="tfng-btn${val===v?' selected':''}" onclick="setTFNG(${q.id},'${v}',this)">${v}</button>`).join('')}</div>`;
+  }else if(q.type==='tfng'){
+    inner=`<div class="q-text">${q.text}</div><div class="tfng-btns">${['TRUE','FALSE','NOT GIVEN'].map(v=>`<button class="tfng-btn${val===v?' selected':''}" onclick="setTFNG(${q.id},'${v}',this)">${v}</button>`).join('')}</div>`;
+  }else if(q.type==='mcq'){
+    const opts=(q.options||[]).map((o,i)=>{const l=String.fromCharCode(65+i);return`<label class="q-option${val===l?' selected':''}"><input type="radio" name="q${q.id}" value="${l}"${val===l?' checked':''} onchange="setMCQ(${q.id},'${l}')"><span>${o}</span></label>`;}).join('');
+    inner=`<div class="q-text">${q.text}</div><div class="q-options">${opts}</div>`;
+  }else if(q.type==='multi2'){
+    const sel=(val||'').split('');
+    const opts=(q.options||[]).map((o,i)=>{const l=String.fromCharCode(65+i);return`<label class="q-option${sel.includes(l)?' selected':''}"><input type="checkbox" name="q${q.id}" value="${l}"${sel.includes(l)?' checked':''} onchange="setMulti2(${q.id},this)"><span>${o}</span></label>`;}).join('');
+    inner=`<div class="q-text" style="font-size:12px;color:var(--text3);margin-bottom:8px">Choose TWO answers</div><div class="q-options">${opts}</div>`;
+  }
+  return `<div class="q-block${fl?' flagged':''}${val?' answered':''}" id="qblock${q.id}">
+    <div class="q-num">Question ${q.id}</div>${inner}
+    <button class="flag-btn${fl?' active':''}" onclick="toggleFlag(${q.id})" title="Flag">⚑</button>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════
+// ANSWER HANDLERS
+// ═══════════════════════════════════════════
+function setAnswer(id,val){answers[id]=val;updateBlock(id);saveAll();updatePalette();}
+function setTFNG(id,val,btn){answers[id]=val;btn.closest('.tfng-btns').querySelectorAll('.tfng-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');updateBlock(id);saveAll();updatePalette();}
+function setMCQ(id,val){answers[id]=val;document.querySelectorAll(`[name="q${id}"]`).forEach(r=>{const l=r.closest('.q-option');if(l)l.classList.toggle('selected',r.value===val);});updateBlock(id);saveAll();updatePalette();}
+function setMulti2(id,cb){
+  const checked=[...document.querySelectorAll(`[name="q${id}"]:checked`)].map(c=>c.value);
+  if(!cb.checked&&checked.length===0){answers[id]='';updateBlock(id);saveAll();updatePalette();return;}
+  if(cb.checked&&checked.length>2){cb.checked=false;return;}
+  const sorted=checked.sort().join('');
+  answers[id]=sorted;
+  document.querySelectorAll(`[name="q${id}"]`).forEach(c=>{const l=c.closest('.q-option');if(l)l.classList.toggle('selected',c.checked);});
+  updateBlock(id);saveAll();updatePalette();
+}
+function updateBlock(id){const b=document.getElementById('qblock'+id);if(b){b.classList.toggle('answered',!!(answers[id]&&answers[id].trim()));b.classList.toggle('flagged',!!(flags[id]));}}
+function toggleFlag(id){flags[id]=!flags[id];const b=document.querySelector(`#qblock${id} .flag-btn`);if(b)b.classList.toggle('active',flags[id]);updateBlock(id);saveAll();updatePalette();}
+
+// ═══════════════════════════════════════════
+// PALETTE
+// ═══════════════════════════════════════════
+function buildPalette(){
+  document.getElementById('palette-nums').innerHTML=
+    Array.from({length:40},(_,i)=>`<button class="pal-num" id="pal${i+1}" onclick="jumpToQ(${i+1})">${i+1}</button>`).join('');
+  updatePalette();
+}
+function updatePalette(){
+  for(let i=1;i<=40;i++){
+    const e=document.getElementById('pal'+i);if(!e)continue;
+    e.classList.remove('done','flagged');
+    if(flags[i])e.classList.add('flagged');
+    else if(answers[i]&&answers[i].trim())e.classList.add('done');
+  }
+}
+function jumpToQ(id){
+  const q=QUESTIONS.find(q=>q.id===id);if(!q)return;
+  if(q.passage!==currentPassage)switchPassage(q.passage);
+  setTimeout(()=>{
+    const el=document.getElementById('qblock'+id);
+    if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.style.boxShadow='0 0 0 3px var(--accent)';setTimeout(()=>el.style.boxShadow='',1600);}
+    document.querySelectorAll('.pal-num').forEach(b=>b.classList.remove('active'));
+    const pb=document.getElementById('pal'+id);if(pb)pb.classList.add('active');
+  },100);
+}
+
+// ═══════════════════════════════════════════
+// PASSAGE SWITCH
+// ═══════════════════════════════════════════
+function switchPassage(idx){
+  currentPassage=idx;
+  renderPassage(idx);renderQuestions(idx);
+  if(reviewModeOn)applyReviewMarkup();
+  document.querySelectorAll('.ptab').forEach((t,i)=>t.classList.toggle('active',i===idx));
+  document.getElementById('passage-panel').scrollTop=0;
+  document.getElementById('questions-panel').scrollTop=0;
+  document.getElementById('scroll-bar').style.width='0%';
+  updatePalette();
+}
+
+function initScrollProgress(){
+  const pp=document.getElementById('passage-panel');
+  pp.addEventListener('scroll',()=>{
+    const s=pp.scrollHeight-pp.clientHeight;
+    document.getElementById('scroll-bar').style.width=(s>0?(pp.scrollTop/s*100):100)+'%';
+  });
+}
+
+function flashUnanswered(){
+  QUESTIONS.filter(q=>!answers[q.id]||!answers[q.id].trim()).forEach(q=>{
+    const el=document.getElementById('pal'+q.id);
+    if(el){el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),1600);}
+  });
+}
+
+function backToResults(){
+  document.getElementById('back-to-results').style.display='none';
+  document.getElementById('results-screen').style.display='block';
+}
+
+// ═══════════════════════════════════════════
+// TIMER
+// ═══════════════════════════════════════════
+function startTimer(){
+  updateTimerDisplay();
+  timerInt=setInterval(()=>{timerSec--;saveAll();updateTimerDisplay();if(timerSec<=0){clearInterval(timerInt);submitTest();}},1000);
+}
+function updateTimerDisplay(){
+  const m=Math.floor(timerSec/60),s=timerSec%60;
+  const b=document.getElementById('timer-box');
+  b.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  b.classList.remove('warn','critical');
+  if(timerSec<=300)b.classList.add('critical');
+  else if(timerSec<=600)b.classList.add('warn');
+}
+
+// ═══════════════════════════════════════════
+// SETTINGS
+// ═══════════════════════════════════════════
+function toggleSettings(){const p=document.getElementById('settings-panel');p.style.display=p.style.display==='block'?'none':'block';}
+function setTheme(theme,btn){document.body.className=theme==='dark'?'dark':'';document.querySelectorAll('.sbtn[onclick*="setTheme"]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');localStorage.setItem('ielts_theme',theme);}
+function setFont(size,btn){document.body.style.fontSize=size+'px';document.querySelectorAll('.sbtn-fs').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+function toggleRuler(){const on=document.getElementById('ruler-toggle').checked;document.getElementById('ruler').style.display=on?'block':'none';if(on)updateRulerWidth();}
+function updateRulerWidth(){const pp=document.getElementById('passage-panel'),r=document.getElementById('ruler');const rect=pp.getBoundingClientRect();r.style.left=rect.left+'px';r.style.width=rect.width+'px';}
+function toggleFullscreen(){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+function toggleNotes(){const b=document.getElementById('notes-box');b.style.display=b.style.display==='block'?'none':'block';}
+function saveNotes(){try{localStorage.setItem('ielts_t8_notes',document.getElementById('notes-ta').value);}catch(e){}}
+
+// ═══════════════════════════════════════════
+// HIGHLIGHTING
+// ═══════════════════════════════════════════
+let savedRange=null,activeHlColor='yellow';
+function inPassage(el){return document.getElementById('passage-panel').contains(el);}
+function getSelRange(){const sel=window.getSelection();if(sel&&sel.toString().trim().length>0)return sel.getRangeAt(0).cloneRange();return null;}
+function onContextMenu(e){
+  const sel=window.getSelection();
+  if(sel&&sel.toString().trim().length>0&&inPassage(e.target)){e.preventDefault();savedRange=sel.getRangeAt(0).cloneRange();showCtx(e.clientX,e.clientY);}
+  else hideCtx();
+}
+document.addEventListener('mouseup',e=>{
+  if(!e.shiftKey)return;
+  const r=getSelRange();if(!r)return;
+  const anchor=window.getSelection().anchorNode;
+  if(!anchor||!inPassage(anchor))return;
+  savedRange=r;applyHighlight(activeHlColor);
+});
+document.addEventListener('keydown',e=>{
+  if(e.ctrlKey&&e.key==='n'){e.preventDefault();toggleNotes();return;}
+  if(!e.shiftKey||e.ctrlKey||e.altKey||e.metaKey)return;
+  const r=getSelRange();
+  if(e.key==='Y'||e.key==='y'){if(r&&inPassage(window.getSelection().anchorNode)){e.preventDefault();savedRange=r;activeHlColor='yellow';applyHighlight('yellow');}}
+  if(e.key==='G'||e.key==='g'){if(r&&inPassage(window.getSelection().anchorNode)){e.preventDefault();savedRange=r;activeHlColor='green';applyHighlight('green');}}
+  if(e.key==='R'||e.key==='r'){if(r&&inPassage(window.getSelection().anchorNode)){e.preventDefault();savedRange=r;removeHighlight();}}
+  if(['ArrowLeft','ArrowRight'].includes(e.key)){const f=document.activeElement;if(f&&f.classList.contains('tfng-btn')){const s=[...f.closest('.tfng-btns').querySelectorAll('.tfng-btn')];const i=s.indexOf(f);const n=e.key==='ArrowRight'?s[i+1]:s[i-1];if(n){n.focus();n.click();}e.preventDefault();}}
+  if(['ArrowUp','ArrowDown'].includes(e.key)){const f=document.activeElement;if(f&&f.type==='radio'){const rs=[...document.querySelectorAll(`[name="${f.name}"]`)];const i=rs.indexOf(f);const n=e.key==='ArrowDown'?rs[i+1]:rs[i-1];if(n){n.focus();n.click();}e.preventDefault();}}
+});
+function showCtx(x,y){const m=document.getElementById('ctx-menu');m.style.display='block';m.style.left=Math.min(x,window.innerWidth-200)+'px';m.style.top=Math.min(y,window.innerHeight-130)+'px';}
+function hideCtx(){document.getElementById('ctx-menu').style.display='none';}
+function applyHighlight(color){
+  hideCtx();if(!savedRange)return;activeHlColor=color;
+  const span=document.createElement('span');span.className='hl-'+color;span.setAttribute('data-hl',color);
+  try{savedRange.surroundContents(span);}catch(e){const frag=savedRange.extractContents();span.appendChild(frag);savedRange.insertNode(span);}
+  window.getSelection().removeAllRanges();savedRange=null;
+}
+function removeHighlight(){
+  hideCtx();if(!savedRange)return;
+  const c=savedRange.commonAncestorContainer,s=c.nodeType===3?c.parentElement:c;
+  if(s&&s.dataset&&s.dataset.hl){const p=s.parentNode;while(s.firstChild)p.insertBefore(s.firstChild,s);p.removeChild(s);}
+  window.getSelection().removeAllRanges();savedRange=null;
+}
+
+// ═══════════════════════════════════════════
+// SUBMIT & RESULTS
+// ═══════════════════════════════════════════
+function submitTest(){
+  if(testDone)return;
+  const un=QUESTIONS.filter(q=>!answers[q.id]||!answers[q.id].trim()).length;
+  if(un>0){flashUnanswered();if(!confirm(`${un} question(s) unanswered. Submit anyway?`))return;}
+  clearInterval(timerInt);testDone=true;showResults();
+}
+
+function showResults(){
+  let correct=0,wrong=0,skip=0;
+  const bp=PASSAGES.map(()=>({correct:0,wrong:0,skip:0}));
+  QUESTIONS.forEach(q=>{
+    const ua=(answers[q.id]||'').trim();
+    const ok=isCorrect(q,ua);
+    if(!ua){skip++;bp[q.passage].skip++;}
+    else if(ok){correct++;bp[q.passage].correct++;}
+    else{wrong++;bp[q.passage].wrong++;}
+  });
+  let band=2.5,desc='Intermittent User';
+  for(const b of BAND_TABLE){if(correct>=b.min&&correct<=b.max){band=b.band;desc=b.desc;break;}}
+  document.getElementById('res-band').textContent=band;
+  document.getElementById('res-band-desc').textContent=`${desc} — ${correct} correct out of 40`;
+  document.getElementById('res-correct').textContent=correct;
+  document.getElementById('res-wrong').textContent=wrong;
+  document.getElementById('res-skip').textContent=skip;
+  document.getElementById('res-pct').textContent=Math.round(correct/40*100)+'%';
+  document.getElementById('p-breakdown').innerHTML=PASSAGES.map((p,i)=>`
+    <div class="p-card"><h4>${p.title}: ${p.heading}</h4>
+    <div class="p-card-stats">
+      <span style="color:var(--correct);font-weight:700">✓ ${bp[i].correct}</span>
+      <span style="color:var(--wrong);font-weight:700">✗ ${bp[i].wrong}</span>
+      <span style="color:var(--text3)">— ${bp[i].skip} skipped</span>
+    </div></div>`).join('');
+  document.getElementById('review-grid').innerHTML=QUESTIONS.map(q=>{
+    const ua=(answers[q.id]||'').trim();
+    const ok=isCorrect(q,ua);
+    const cls=!ua?'unanswered':ok?'correct':'wrong';
+    return`<div class="review-card ${cls}">
+      <div class="rev-q">Q${q.id}</div>
+      <div class="rev-yours">${ua?`Your: ${ua}`:'Not answered'}</div>
+      ${!ua?`<div class="rev-correct">✓ ${q.answer}</div>`:ok?'<div class="rev-correct">✓ Correct</div>':`<div class="rev-correct">✓ ${q.answer}</div>`}
+    </div>`;
+  }).join('');
+  document.getElementById('results-screen').style.display='block';
+}
+
+// ═══════════════════════════════════════════
+// REVIEW MODE
+// ═══════════════════════════════════════════
+function reviewMode(){
+  reviewModeOn=true;
+  document.getElementById('results-screen').style.display='none';
+  document.getElementById('back-to-results').style.display='block';
+  switchPassage(0);
+}
+
+function applyReviewMarkup(){
+  QUESTIONS.filter(q=>q.passage===currentPassage).forEach(q=>{
+    const ua=(answers[q.id]||'').trim();
+    const ok=isCorrect(q,ua);
+    if(q.type==='fill'){
+      const el=document.getElementById('q'+q.id);
+      if(el){
+        el.classList.add(ok?'correct-ans':'wrong-ans');el.disabled=true;
+        el.parentNode.querySelectorAll('.answer-reveal,.answer-hint').forEach(o=>o.remove());
+        if(!ok){const r=document.createElement('div');r.className='answer-reveal';r.textContent='✓ Correct: '+q.answer;el.parentNode.insertBefore(r,el.nextSibling);}
+        if(q.hint){const h=document.createElement('div');h.className='answer-hint';h.textContent='📍 '+q.hint;const ref=el.parentNode.querySelector('.answer-reveal');el.parentNode.insertBefore(h,(ref?ref:el).nextSibling);}
+      }
+    }else if(q.type==='yesno'){
+    inner=`<div class="q-text">${q.text}</div><div class="tfng-btns">${['YES','NO','NOT GIVEN'].map(v=>`<button class="tfng-btn${val===v?' selected':''}" onclick="setTFNG(${q.id},'${v}',this)">${v}</button>`).join('')}</div>`;
+  }else if(q.type==='tfng'||q.type==='yesno'){
+      document.querySelectorAll(`#qblock${q.id} .tfng-btn`).forEach(b=>{
+        if(b.textContent===q.answer)b.classList.add('correct-ans');
+        else if(b.classList.contains('selected'))b.classList.add('wrong-ans');
+      });
+      if(q.hint){const block=document.getElementById('qblock'+q.id);if(block&&!block.querySelector('.answer-hint')){const h=document.createElement('div');h.className='answer-hint';h.style.marginTop='8px';h.textContent='📍 '+q.hint;block.querySelector('.tfng-btns').after(h);}}
+    }else if(q.type==='mcq'){
+      document.querySelectorAll(`[name="q${q.id}"]`).forEach(r=>r.disabled=true);
+      if(q.hint){const block=document.getElementById('qblock'+q.id);if(block&&!block.querySelector('.answer-hint')){const h=document.createElement('div');h.className='answer-hint';h.style.marginTop='8px';h.textContent='📍 '+q.hint;const opts=block.querySelector('.q-options');if(opts)opts.after(h);}}
+    }
+  });
+}
+
+// ═══════════════════════════════════════════
+// RESTART
+// ═══════════════════════════════════════════
+function restartTest(){
+  if(!confirm('Restart? All answers and the timer will be reset.'))return;
+  ['ielts_t8_answers','ielts_t8_flags','ielts_t8_timer','ielts_t8_notes'].forEach(k=>localStorage.removeItem(k));
+  answers={};flags={};timerSec=3600;testDone=false;reviewModeOn=false;currentPassage=0;
+  clearInterval(timerInt);timerInt=null;
+  const box=document.getElementById('timer-box');box.textContent='60:00';box.classList.remove('warn','critical');
+  document.getElementById('notes-ta').value='';
+  document.getElementById('results-screen').style.display='none';
+  document.getElementById('settings-panel').style.display='none';
+  document.getElementById('back-to-results').style.display='none';
+  document.querySelectorAll('.ptab').forEach((t,i)=>t.classList.toggle('active',i===0));
+  document.getElementById('start-screen').style.display='flex';
+}
+</script>
+</body>
+</html>
