@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BandPath - IELTS Prep</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-primary: #0a1929;
+  --bg-secondary: #0f2744;
+  --bg-card: #132f4c;
+  --accent: #00C4FF;
+  --accent-glow: rgba(0, 196, 255, 0.15);
+  --text-primary: #ffffff;
+  --text-muted: #b2bac2;
+  --text-dim: #5a6a7a;
+  --green: #2ecc71;
+  --orange: #f39c12;
+  --red: #e74c3c;
+  --nav-height: 68px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html, body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 16px);
+  -webkit-overflow-scrolling: touch;
+}
+
+.tab-content {
+  display: none;
+  padding: 20px 16px;
+  animation: fadeIn 0.25s ease;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: calc(var(--nav-height) + var(--safe-bottom));
+  padding-bottom: var(--safe-bottom);
+  background: var(--bg-secondary);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
+  border: none;
+  background: none;
+  color: var(--text-dim);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.nav-item svg {
+  width: 24px;
+  height: 24px;
+  fill: var(--text-dim);
+  transition: fill 0.2s;
+}
+
+.nav-item.active {
+  color: var(--accent);
+}
+
+.nav-item.active svg {
+  fill: var(--accent);
+}
+
+/* Cards */
+.card {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 16px;
+}
+
+/* HOME TAB */
+.greeting {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.greeting-sub {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stat-box {
+  background: var(--bg-card);
+  border-radius: 14px;
+  padding: 16px 12px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.stat-icon {
+  font-size: 24px;
+  margin-bottom: 6px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.task-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.task-checkbox {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid var(--text-dim);
+  margin-right: 14px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.task-checkbox.checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.task-checkbox.checked::after {
+  content: '';
+  width: 6px;
+  height: 10px;
+  border: solid var(--bg-primary);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-top: -2px;
+}
+
+.task-text {
+  font-size: 15px;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.task-text.completed {
+  text-decoration: line-through;
+  color: var(--text-dim);
+}
+
+.task-xp {
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--accent), #0099cc);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  letter-spacing: 0.3px;
+  margin-top: 8px;
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+/* VOCAB TAB */
+.vocab-stats {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.vocab-stat {
+  flex: 1;
+  text-align: center;
+  padding: 12px 8px;
+  background: var(--bg-card);
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.vocab-stat-value {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.vocab-stat-value.green { color: var(--green); }
+.vocab-stat-value.orange { color: var(--orange); }
+.vocab-stat-value.blue { color: var(--accent); }
+
+.vocab-stat-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.flashcard {
+  background: var(--bg-card);
+  border-radius: 20px;
+  padding: 32px 24px;
+  text-align: center;
+  border: 1px solid rgba(0,196,255,0.1);
+  margin-bottom: 16px;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.flashcard-word {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.flashcard-phonetic {
+  font-size: 14px;
+  color: var(--accent);
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.flashcard-def {
+  font-size: 16px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.flashcard-example {
+  font-size: 14px;
+  color: var(--text-dim);
+  font-style: italic;
+  line-height: 1.5;
+  margin-bottom: 12px;
+  padding: 12px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 10px;
+}
+
+.flashcard-source {
+  font-size: 12px;
+  color: var(--text-dim);
+  opacity: 0.7;
+}
+
+.flashcard-counter {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.rating-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.rating-btn {
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s, opacity 0.15s;
+  letter-spacing: 0.3px;
+}
+
+.rating-btn:active {
+  transform: scale(0.95);
+}
+
+.rating-btn.hard {
+  background: rgba(231,76,60,0.15);
+  color: var(--red);
+}
+
+.rating-btn.okay {
+  background: rgba(243,156,18,0.15);
+  color: var(--orange);
+}
+
+.rating-btn.easy {
+  background: rgba(46,204,113,0.15);
+  color: var(--green);
+}
+
+/* TESTS TAB */
+.filter-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.filter-row::-webkit-scrollbar { display: none; }
+
+.filter-btn {
+  padding: 10px 20px;
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.filter-btn.active {
+  background: var(--accent);
+  color: var(--bg-primary);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+
+.test-card {
+  display: flex;
+  align-items: center;
+  background: var(--bg-card);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: transform 0.15s, background 0.15s;
+  border: 1px solid rgba(255,255,255,0.04);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.test-card:active {
+  transform: scale(0.98);
+  background: rgba(19,47,76,0.8);
+}
+
+.test-card.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.test-card.locked:active {
+  transform: none;
+  background: var(--bg-card);
+}
+
+.test-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-right: 14px;
+  flex-shrink: 0;
+}
+
+.test-icon.reading {
+  background: rgba(0,196,255,0.12);
+}
+
+.test-icon.listening {
+  background: rgba(243,156,18,0.12);
+}
+
+.test-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.test-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.test-meta {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.test-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  margin-left: 10px;
+  flex-shrink: 0;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge.medium {
+  background: rgba(243,156,18,0.15);
+  color: var(--orange);
+}
+
+.badge.hard {
+  background: rgba(231,76,60,0.15);
+  color: var(--red);
+}
+
+.test-score {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.lock-icon {
+  font-size: 18px;
+  color: var(--text-dim);
+}
+
+/* PROGRESS TAB */
+.band-display {
+  text-align: center;
+  padding: 32px 0 24px;
+}
+
+.band-label {
+  font-size: 14px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.band-score {
+  font-size: 64px;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  text-shadow: 0 0 40px rgba(0,196,255,0.3);
+}
+
+.band-score-sub {
+  font-size: 14px;
+  color: var(--text-dim);
+  margin-top: 8px;
+}
+
+.chart-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  margin-bottom: 8px;
+}
+
+.chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.accuracy-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.accuracy-item:last-child {
+  margin-bottom: 0;
+}
+
+.accuracy-label {
+  width: 90px;
+  font-size: 13px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.accuracy-bar-bg {
+  flex: 1;
+  height: 8px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 4px;
+  margin: 0 12px;
+  overflow: hidden;
+}
+
+.accuracy-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+
+.accuracy-value {
+  width: 40px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.week-calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.day-cell {
+  text-align: center;
+  padding: 10px 4px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.03);
+}
+
+.day-cell .day-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.day-cell .day-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  margin: 0 auto;
+}
+
+.day-cell.active .day-dot {
+  background: var(--green);
+  box-shadow: 0 0 8px rgba(46,204,113,0.4);
+}
+
+.day-cell.today {
+  background: var(--accent-glow);
+  border: 1px solid rgba(0,196,255,0.2);
+}
+
+.day-cell.today .day-label {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* PROFILE TAB */
+.profile-header {
+  text-align: center;
+  padding: 24px 0 20px;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), #0066cc);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 auto 14px;
+  box-shadow: 0 4px 24px rgba(0,196,255,0.25);
+}
+
+.profile-name {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.profile-since {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.profile-stat {
+  text-align: center;
+  padding: 16px 8px;
+  background: var(--bg-card);
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.profile-stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.profile-stat-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-top: 4px;
+}
+
+.goal-card {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(0,196,255,0.08);
+}
+
+.goal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.goal-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.goal-value {
+  font-size: 14px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.goal-bar-bg {
+  width: 100%;
+  height: 10px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.goal-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #0099cc);
+  border-radius: 5px;
+  transition: width 0.6s ease;
+}
+
+.settings-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.settings-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.settings-label {
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+.toggle {
+  position: relative;
+  width: 48px;
+  height: 28px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.toggle input {
+  display: none;
+}
+
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.1);
+  border-radius: 14px;
+  transition: background 0.25s;
+}
+
+.toggle-slider::after {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.25s;
+}
+
+.toggle input:checked + .toggle-slider {
+  background: var(--accent);
+}
+
+.toggle input:checked + .toggle-slider::after {
+  transform: translateX(20px);
+}
+
+/* Section title */
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+/* Scrollbar */
+.app-container::-webkit-scrollbar {
+  width: 0;
+}
+
+/* Fullscreen button */
+.fullscreen-btn {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 999;
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--accent);
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: background 0.2s;
+}
+.fullscreen-btn:active { background: var(--bg-secondary); }
+.fullscreen-btn.show { display: flex; }
+
+/* Responsive */
+@media (min-width: 768px) {
+  .tab-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 32px;
+  }
+}
+</style>
+</head>
+<body>
+
+<button class="fullscreen-btn" id="fullscreenBtn" onclick="window.goFullscreen()" title="Fullscreen">&#x26F6;</button>
+<div class="app-container" id="appContainer">
+
+  <!-- HOME TAB -->
+  <div class="tab-content active" id="tab-home">
+    <div class="greeting" id="greetingText">Good morning,</div>
+    <div class="greeting-sub">Let's boost your IELTS score today</div>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-icon">&#128293;</div>
+        <div class="stat-value" id="statStreak">0</div>
+        <div class="stat-label">Streak</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon">&#9889;</div>
+        <div class="stat-value" id="statXP">0</div>
+        <div class="stat-label">XP</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon">&#127919;</div>
+        <div class="stat-value" id="statBand">0</div>
+        <div class="stat-label">Band</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Today's Tasks</div>
+      <div class="task-item" onclick="window.toggleTask(0)">
+        <div class="task-checkbox" id="taskCheck0"></div>
+        <span class="task-text" id="taskText0">Vocabulary review (20 words)</span>
+        <span class="task-xp">+10 XP</span>
+      </div>
+      <div class="task-item" onclick="window.toggleTask(1)">
+        <div class="task-checkbox" id="taskCheck1"></div>
+        <span class="task-text" id="taskText1">Reading passage 1</span>
+        <span class="task-xp">+10 XP</span>
+      </div>
+      <div class="task-item" onclick="window.toggleTask(2)">
+        <div class="task-checkbox" id="taskCheck2"></div>
+        <span class="task-text" id="taskText2">Full mock test</span>
+        <span class="task-xp">+10 XP</span>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="window.switchTab('tests')">Start Practice</button>
+  </div>
+
+  <!-- VOCABULARY TAB -->
+  <div class="tab-content" id="tab-vocab">
+    <div class="section-title">Vocabulary</div>
+
+    <div class="vocab-stats">
+      <div class="vocab-stat">
+        <div class="vocab-stat-value green">142</div>
+        <div class="vocab-stat-label">Learned</div>
+      </div>
+      <div class="vocab-stat">
+        <div class="vocab-stat-value orange">28</div>
+        <div class="vocab-stat-label">Review</div>
+      </div>
+      <div class="vocab-stat">
+        <div class="vocab-stat-value blue">320</div>
+        <div class="vocab-stat-label">Total</div>
+      </div>
+    </div>
+
+    <div class="flashcard-counter" id="cardCounter">1 / 10</div>
+    <div class="flashcard" id="flashcard">
+      <div class="flashcard-word" id="fcWord"></div>
+      <div class="flashcard-phonetic" id="fcPhonetic"></div>
+      <div class="flashcard-def" id="fcDef"></div>
+      <div class="flashcard-example" id="fcExample"></div>
+      <div class="flashcard-source" id="fcSource"></div>
+    </div>
+
+    <div class="rating-buttons">
+      <button class="rating-btn hard" onclick="window.rateCard('hard')">Hard</button>
+      <button class="rating-btn okay" onclick="window.rateCard('okay')">Okay</button>
+      <button class="rating-btn easy" onclick="window.rateCard('easy')">Easy</button>
+    </div>
+  </div>
+
+  <!-- TESTS TAB -->
+  <div class="tab-content" id="tab-tests">
+    <div class="section-title">Practice Tests</div>
+
+    <div class="filter-row">
+      <button class="filter-btn active" onclick="window.filterTests('all')" id="filterAll">All</button>
+      <button class="filter-btn" onclick="window.filterTests('reading')" id="filterReading">Reading</button>
+      <button class="filter-btn" onclick="window.filterTests('listening')" id="filterListening">Listening</button>
+    </div>
+
+    <div id="testsList"></div>
+  </div>
+
+  <!-- PROGRESS TAB -->
+  <div class="tab-content" id="tab-progress">
+    <div class="section-title">Progress</div>
+
+    <div class="band-display">
+      <div class="band-label">Current Band Score</div>
+      <div class="band-score" id="progressBand">6.0</div>
+      <div class="band-score-sub">Based on your recent tests</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Band Score Trend</div>
+      <div class="chart-container">
+        <canvas id="bandChart"></canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Accuracy by Question Type</div>
+      <div class="accuracy-item">
+        <span class="accuracy-label">True / False</span>
+        <div class="accuracy-bar-bg"><div class="accuracy-bar" style="width:72%;background:var(--accent)"></div></div>
+        <span class="accuracy-value" style="color:var(--accent)">72%</span>
+      </div>
+      <div class="accuracy-item">
+        <span class="accuracy-label">MCQ</span>
+        <div class="accuracy-bar-bg"><div class="accuracy-bar" style="width:85%;background:var(--green)"></div></div>
+        <span class="accuracy-value" style="color:var(--green)">85%</span>
+      </div>
+      <div class="accuracy-item">
+        <span class="accuracy-label">Fill-in</span>
+        <div class="accuracy-bar-bg"><div class="accuracy-bar" style="width:64%;background:var(--orange)"></div></div>
+        <span class="accuracy-value" style="color:var(--orange)">64%</span>
+      </div>
+      <div class="accuracy-item">
+        <span class="accuracy-label">Matching</span>
+        <div class="accuracy-bar-bg"><div class="accuracy-bar" style="width:78%;background:var(--accent)"></div></div>
+        <span class="accuracy-value" style="color:var(--accent)">78%</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">This Week</div>
+      <div class="week-calendar" id="weekCalendar"></div>
+    </div>
+  </div>
+
+  <!-- PROFILE TAB -->
+  <div class="tab-content" id="tab-profile">
+    <div class="profile-header">
+      <div class="avatar" id="profileAvatar">S</div>
+      <div class="profile-name" id="profileName">Student</div>
+      <div class="profile-since" id="profileSince">Member since June 2026</div>
+    </div>
+
+    <div class="profile-stats">
+      <div class="profile-stat">
+        <div class="profile-stat-value" id="profileStreak">0</div>
+        <div class="profile-stat-label">Day Streak</div>
+      </div>
+      <div class="profile-stat">
+        <div class="profile-stat-value" id="profileTests">0</div>
+        <div class="profile-stat-label">Tests Done</div>
+      </div>
+      <div class="profile-stat">
+        <div class="profile-stat-value" id="profileBestBand">0</div>
+        <div class="profile-stat-label">Best Band</div>
+      </div>
+    </div>
+
+    <div class="goal-card">
+      <div class="goal-header">
+        <span class="goal-title">&#127919; Target: Band 7.0</span>
+        <span class="goal-value" id="goalPercent">86%</span>
+      </div>
+      <div class="goal-bar-bg">
+        <div class="goal-bar" id="goalBar" style="width:86%"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Notifications</div>
+      <div class="settings-item">
+        <span class="settings-label">Daily Reminder</span>
+        <label class="toggle">
+          <input type="checkbox" id="settingReminder" checked onchange="window.saveSetting('reminder', this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="settings-item">
+        <span class="settings-label">Streak Alerts</span>
+        <label class="toggle">
+          <input type="checkbox" id="settingStreak" checked onchange="window.saveSetting('streak', this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="settings-item">
+        <span class="settings-label">New Tests</span>
+        <label class="toggle">
+          <input type="checkbox" id="settingNewTests" onchange="window.saveSetting('newTests', this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-item active" onclick="window.switchTab('home')" id="nav-home">
+    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    <span>Home</span>
+  </button>
+  <button class="nav-item" onclick="window.switchTab('vocab')" id="nav-vocab">
+    <svg viewBox="0 0 24 24"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zm0 13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5z"/></svg>
+    <span>Vocab</span>
+  </button>
+  <button class="nav-item" onclick="window.switchTab('tests')" id="nav-tests">
+    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+    <span>Tests</span>
+  </button>
+  <button class="nav-item" onclick="window.switchTab('progress')" id="nav-progress">
+    <svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>
+    <span>Progress</span>
+  </button>
+  <button class="nav-item" onclick="window.switchTab('profile')" id="nav-profile">
+    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+    <span>Profile</span>
+  </button>
+</nav>
+
+<script>
+(function() {
+  'use strict';
+
+  // ===== TELEGRAM INTEGRATION =====
+  var tg = window.Telegram && window.Telegram.WebApp;
+  var user = { first_name: 'Student', last_name: '', id: 0 };
+
+  if (tg) {
+    try {
+      tg.ready();
+      tg.expand();
+      tg.setHeaderColor('#0a1929');
+      tg.setBackgroundColor('#0a1929');
+      if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        user = tg.initDataUnsafe.user;
+      }
+    } catch (e) {}
+  }
+
+  // ===== FULLSCREEN SUPPORT =====
+  var fsBtn = document.getElementById('fullscreenBtn');
+  var canTgFullscreen = tg && typeof tg.requestFullscreen === 'function';
+  var canBrowserFullscreen = document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen;
+
+  if (canTgFullscreen || canBrowserFullscreen) {
+    fsBtn.classList.add('show');
+  }
+
+  window.goFullscreen = function() {
+    try {
+      if (canTgFullscreen) {
+        tg.requestFullscreen();
+      } else if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+      } else if (document.documentElement.webkitRequestFullscreen) {
+        document.documentElement.webkitRequestFullscreen();
+      }
+    } catch (e) {}
+  };
+
+  var firstName = user.first_name || 'Student';
+  var fullName = firstName + (user.last_name ? ' ' + user.last_name : '');
+
+  // ===== STORAGE HELPERS =====
+  function getLS(key, fallback) {
+    try {
+      var val = localStorage.getItem('bandpath_' + key);
+      if (val === null) return fallback;
+      return JSON.parse(val);
+    } catch (e) {
+      return fallback;
+    }
+  }
+
+  function setLS(key, val) {
+    try {
+      localStorage.setItem('bandpath_' + key, JSON.stringify(val));
+    } catch (e) {}
+  }
+
+  // ===== INITIALIZE DATA =====
+  var streak = getLS('user_streak', 0);
+  var xp = getLS('user_xp', 0);
+  var band = getLS('user_band', 0);
+  var tasks = getLS('user_tasks_today', [false, false, false]);
+  var settings = getLS('user_settings', { reminder: true, streak: true, newTests: false });
+  var testScores = getLS('user_test_scores', {});
+  var testsDone = getLS('user_tests_done', 0);
+  var bestBand = getLS('user_best_band', 0);
+  var bandHistory = getLS('user_band_history', [5.5, 5.5, 6.0, 6.0, 6.0, 6.5]);
+  var activeDays = getLS('user_active_days', []);
+  var memberSince = getLS('user_member_since', null);
+
+  // Set member since on first visit
+  if (!memberSince) {
+    var now = new Date();
+    memberSince = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+    setLS('user_member_since', memberSince);
+  }
+
+  // Mark today as active
+  var todayStr = new Date().toISOString().split('T')[0];
+  if (activeDays.indexOf(todayStr) === -1) {
+    activeDays.push(todayStr);
+    setLS('user_active_days', activeDays);
+  }
+
+  // ===== GREETING =====
+  function getGreeting() {
+    var h = new Date().getHours();
+    if (h < 12) return 'Good morning';
+    if (h < 17) return 'Good afternoon';
+    return 'Good evening';
+  }
+
+  document.getElementById('greetingText').textContent = getGreeting() + ', ' + firstName;
+
+  // ===== HOME STATS =====
+  function updateHomeStats() {
+    document.getElementById('statStreak').textContent = streak;
+    document.getElementById('statXP').textContent = xp;
+    document.getElementById('statBand').textContent = band || 0;
+  }
+
+  function renderTasks() {
+    for (var i = 0; i < 3; i++) {
+      var check = document.getElementById('taskCheck' + i);
+      var text = document.getElementById('taskText' + i);
+      if (tasks[i]) {
+        check.classList.add('checked');
+        text.classList.add('completed');
+      } else {
+        check.classList.remove('checked');
+        text.classList.remove('completed');
+      }
+    }
+  }
+
+  window.toggleTask = function(idx) {
+    if (tasks[idx]) return; // Can't un-complete
+    tasks[idx] = true;
+    xp += 10;
+    setLS('user_tasks_today', tasks);
+    setLS('user_xp', xp);
+    renderTasks();
+    updateHomeStats();
+  };
+
+  updateHomeStats();
+  renderTasks();
+
+  // ===== TAB SWITCHING =====
+  window.switchTab = function(tab) {
+    var tabs = document.querySelectorAll('.tab-content');
+    var navItems = document.querySelectorAll('.nav-item');
+
+    for (var i = 0; i < tabs.length; i++) {
+      tabs[i].classList.remove('active');
+    }
+    for (var j = 0; j < navItems.length; j++) {
+      navItems[j].classList.remove('active');
+    }
+
+    document.getElementById('tab-' + tab).classList.add('active');
+    document.getElementById('nav-' + tab).classList.add('active');
+    document.getElementById('appContainer').scrollTop = 0;
+
+    if (tab === 'progress') {
+      setTimeout(renderChart, 50);
+    }
+    if (tab === 'profile') {
+      updateProfile();
+    }
+  };
+
+  // ===== VOCABULARY =====
+  var vocabWords = [
+    {
+      word: 'Consumption',
+      phonetic: '/kənˈsʌmpʃən/',
+      def: 'The act of using energy, food, or materials; the amount used.',
+      example: '"The consumption of sugar has increased dramatically over the past century."',
+      source: 'Reading Test 1 - Sweet Trouble'
+    },
+    {
+      word: 'Phenomenon',
+      phonetic: '/fəˈnɒmɪnən/',
+      def: 'A fact or situation that is observed to exist or happen, especially one whose cause is in question.',
+      example: '"Prosopagnosia is a neurological phenomenon that affects face recognition."',
+      source: 'Reading Test 2 - Prosopagnosia'
+    },
+    {
+      word: 'Infrastructure',
+      phonetic: '/ˈɪnfrəstrʌktʃər/',
+      def: 'The basic physical and organizational structures needed for the operation of a society.',
+      example: '"The Thames Tunnel represented a major feat of infrastructure engineering."',
+      source: 'Reading Test 3 - Thames Tunnel'
+    },
+    {
+      word: 'Cognitive',
+      phonetic: '/ˈkɒɡnɪtɪv/',
+      def: 'Relating to the mental processes of perception, memory, judgment, and reasoning.',
+      example: '"Multitasking places significant demands on cognitive resources."',
+      source: 'Reading Test 3 - Multitasking'
+    },
+    {
+      word: 'Sustainability',
+      phonetic: '/səˌsteɪnəˈbɪlɪti/',
+      def: 'The ability to maintain at a certain rate or level; avoidance of depletion of natural resources.',
+      example: '"Vertical farming offers new possibilities for agricultural sustainability."',
+      source: 'Reading Test 3 - Skyscraper Farming'
+    },
+    {
+      word: 'Hierarchy',
+      phonetic: '/ˈhaɪərɑːki/',
+      def: 'A system in which members of an organization are ranked according to relative status or authority.',
+      example: '"Traditional organisational design relies on strict hierarchy."',
+      source: 'Reading Test 4 - Organisational Design'
+    },
+    {
+      word: 'Resilience',
+      phonetic: '/rɪˈzɪliəns/',
+      def: 'The capacity to recover quickly from difficulties; toughness.',
+      example: '"Company survival depends largely on organisational resilience."',
+      source: 'Reading Test 5 - Company Survival'
+    },
+    {
+      word: 'Demographic',
+      phonetic: '/ˌdeməˈɡr\xe6fɪk/',
+      def: 'Relating to the structure of populations, especially statistics such as births, deaths, income.',
+      example: '"Understanding demographic shifts is crucial for food policy."',
+      source: 'Reading Test 6 - Humans and Food'
+    },
+    {
+      word: 'Acquisition',
+      phonetic: '/ˌ\xe6kwɪˈzɪʃən/',
+      def: 'The learning or developing of a skill, habit, or quality.',
+      example: '"Mother tongue acquisition occurs naturally in early childhood."',
+      source: 'Reading Test 6 - Mother Tongue'
+    },
+    {
+      word: 'Moderation',
+      phonetic: '/ˌmɒdəˈreɪʃən/',
+      def: 'The avoidance of excess or extremes; the quality of being moderate.',
+      example: '"A digital diet promotes moderation in screen time and technology use."',
+      source: 'Reading Test 7 - Digital Diet'
+    }
+  ];
+
+  var currentCard = 0;
+
+  function renderCard() {
+    var w = vocabWords[currentCard];
+    document.getElementById('fcWord').textContent = w.word;
+    document.getElementById('fcPhonetic').textContent = w.phonetic;
+    document.getElementById('fcDef').textContent = w.def;
+    document.getElementById('fcExample').textContent = w.example;
+    document.getElementById('fcSource').textContent = w.source;
+    document.getElementById('cardCounter').textContent = (currentCard + 1) + ' / ' + vocabWords.length;
+  }
+
+  window.rateCard = function(rating) {
+    currentCard = (currentCard + 1) % vocabWords.length;
+    renderCard();
+  };
+
+  renderCard();
+
+  // ===== TESTS =====
+  var testsData = [
+    { id: 1, type: 'reading', name: 'Reading Test 1: Sweet Trouble', file: 'ielts_reading_test1.html', difficulty: 'medium', questions: 40, time: 60 },
+    { id: 2, type: 'reading', name: 'Reading Test 2: Prosopagnosia', file: 'ielts_reading_test2.html', difficulty: 'medium', questions: 40, time: 60 },
+    { id: 3, type: 'reading', name: 'Reading Test 3: Thames Tunnel', file: 'ielts_reading_test3.html', difficulty: 'hard', questions: 40, time: 60 },
+    { id: 4, type: 'reading', name: 'Reading Test 4: Office Lighting', file: 'ielts_reading_test4.html', difficulty: 'hard', questions: 40, time: 60 },
+    { id: 5, type: 'reading', name: 'Reading Test 5: Why Study History', file: 'ielts_reading_test5.html', difficulty: 'hard', questions: 40, time: 60 },
+    { id: 6, type: 'reading', name: 'Reading Test 6: Humans and Food', file: 'ielts_reading_test6.html', difficulty: 'hard', questions: 40, time: 60 },
+    { id: 7, type: 'reading', name: 'Reading Test 7: Listening to Ocean', file: 'ielts_reading_test7.html', difficulty: 'hard', questions: 40, time: 60 },
+    { id: 8, type: 'listening', name: 'Listening Test 1', file: null, difficulty: 'medium', questions: 40, time: 30, locked: true },
+    { id: 9, type: 'listening', name: 'Listening Test 2', file: null, difficulty: 'medium', questions: 40, time: 30, locked: true },
+    { id: 10, type: 'listening', name: 'Listening Test 3', file: null, difficulty: 'hard', questions: 40, time: 30, locked: true },
+    { id: 11, type: 'listening', name: 'Listening Test 4', file: null, difficulty: 'hard', questions: 40, time: 30, locked: true }
+  ];
+
+  var currentFilter = 'all';
+
+  function renderTests() {
+    var container = document.getElementById('testsList');
+    var html = '';
+
+    for (var i = 0; i < testsData.length; i++) {
+      var t = testsData[i];
+      if (currentFilter !== 'all' && t.type !== currentFilter) continue;
+
+      var isLocked = t.locked === true;
+      var scoreKey = 'test_' + t.id;
+      var savedScore = testScores[scoreKey];
+      var iconClass = t.type === 'reading' ? 'reading' : 'listening';
+      var iconEmoji = t.type === 'reading' ? '&#128214;' : '&#127911;';
+      var timeLabel = t.questions + ' questions · ' + t.time + ' min';
+
+      html += '<div class="test-card' + (isLocked ? ' locked' : '') + '" ' +
+              (isLocked ? '' : 'onclick="window.openTest(\'' + t.file + '\')"') + '>';
+      html += '<div class="test-icon ' + iconClass + '">' + iconEmoji + '</div>';
+      html += '<div class="test-info">';
+      html += '<div class="test-name">' + t.name + '</div>';
+      html += '<div class="test-meta">' + timeLabel + '</div>';
+      html += '</div>';
+      html += '<div class="test-right">';
+
+      if (isLocked) {
+        html += '<span class="lock-icon">&#128274;</span>';
+      } else {
+        html += '<span class="badge ' + t.difficulty + '">' + t.difficulty + '</span>';
+        if (savedScore !== undefined) {
+          html += '<span class="test-score">' + savedScore + '/40</span>';
+        }
+      }
+
+      html += '</div></div>';
+    }
+
+    container.innerHTML = html;
+  }
+
+  window.filterTests = function(filter) {
+    currentFilter = filter;
+    var btns = document.querySelectorAll('.filter-btn');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.remove('active');
+    }
+    document.getElementById('filter' + filter.charAt(0).toUpperCase() + filter.slice(1)).classList.add('active');
+    renderTests();
+  };
+
+  window.openTest = function(file) {
+    if (file) {
+      window.location.href = file;
+    }
+  };
+
+  renderTests();
+
+  // ===== PROGRESS =====
+  function renderChart() {
+    var canvas = document.getElementById('bandChart');
+    if (!canvas) return;
+    var container = canvas.parentElement;
+    var dpr = window.devicePixelRatio || 1;
+    var w = container.offsetWidth;
+    var h = container.offsetHeight;
+
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+
+    var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    var data = bandHistory.length > 0 ? bandHistory : [5.5, 5.5, 6.0, 6.0, 6.0, 6.5];
+    var labels = ['Wk 1', 'Wk 2', 'Wk 3', 'Wk 4', 'Wk 5', 'Wk 6'];
+
+    var padLeft = 40;
+    var padRight = 16;
+    var padTop = 20;
+    var padBottom = 30;
+    var chartW = w - padLeft - padRight;
+    var chartH = h - padTop - padBottom;
+
+    var minVal = 4.0;
+    var maxVal = 9.0;
+    var range = maxVal - minVal;
+
+    // Grid lines
+    ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+    ctx.lineWidth = 1;
+    ctx.font = '11px -apple-system, sans-serif';
+    ctx.fillStyle = '#5a6a7a';
+    ctx.textAlign = 'right';
+
+    for (var g = minVal; g <= maxVal; g += 1) {
+      var gy = padTop + chartH - ((g - minVal) / range * chartH);
+      ctx.beginPath();
+      ctx.moveTo(padLeft, gy);
+      ctx.lineTo(w - padRight, gy);
+      ctx.stroke();
+      ctx.fillText(g.toFixed(1), padLeft - 8, gy + 4);
+    }
+
+    // X labels
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#5a6a7a';
+    for (var l = 0; l < labels.length; l++) {
+      var lx = padLeft + (l / (labels.length - 1)) * chartW;
+      ctx.fillText(labels[l], lx, h - 8);
+    }
+
+    // Area fill
+    ctx.beginPath();
+    for (var a = 0; a < data.length; a++) {
+      var ax = padLeft + (a / (data.length - 1)) * chartW;
+      var ay = padTop + chartH - ((data[a] - minVal) / range * chartH);
+      if (a === 0) ctx.moveTo(ax, ay);
+      else ctx.lineTo(ax, ay);
+    }
+    ctx.lineTo(padLeft + chartW, padTop + chartH);
+    ctx.lineTo(padLeft, padTop + chartH);
+    ctx.closePath();
+
+    var gradient = ctx.createLinearGradient(0, padTop, 0, padTop + chartH);
+    gradient.addColorStop(0, 'rgba(0,196,255,0.2)');
+    gradient.addColorStop(1, 'rgba(0,196,255,0)');
+    ctx.fillStyle = gradient;
+    ctx.fill();
+
+    // Line
+    ctx.beginPath();
+    ctx.strokeStyle = '#00C4FF';
+    ctx.lineWidth = 2.5;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+
+    for (var d = 0; d < data.length; d++) {
+      var dx = padLeft + (d / (data.length - 1)) * chartW;
+      var dy = padTop + chartH - ((data[d] - minVal) / range * chartH);
+      if (d === 0) ctx.moveTo(dx, dy);
+      else ctx.lineTo(dx, dy);
+    }
+    ctx.stroke();
+
+    // Dots
+    for (var p = 0; p < data.length; p++) {
+      var px = padLeft + (p / (data.length - 1)) * chartW;
+      var py = padTop + chartH - ((data[p] - minVal) / range * chartH);
+
+      ctx.beginPath();
+      ctx.arc(px, py, 4, 0, Math.PI * 2);
+      ctx.fillStyle = '#00C4FF';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(px, py, 2, 0, Math.PI * 2);
+      ctx.fillStyle = '#fff';
+      ctx.fill();
+    }
+  }
+
+  // Week calendar
+  function renderWeekCalendar() {
+    var dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    var today = new Date();
+    var dayOfWeek = today.getDay(); // 0=Sun
+    var mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+    var html = '';
+
+    for (var i = 0; i < 7; i++) {
+      var d = new Date(today);
+      d.setDate(today.getDate() + mondayOffset + i);
+      var dateStr = d.toISOString().split('T')[0];
+      var isToday = dateStr === todayStr;
+      var isActive = activeDays.indexOf(dateStr) !== -1;
+
+      var classes = 'day-cell';
+      if (isToday) classes += ' today';
+      if (isActive) classes += ' active';
+
+      html += '<div class="' + classes + '">';
+      html += '<div class="day-label">' + dayLabels[i] + '</div>';
+      html += '<div class="day-dot"></div>';
+      html += '</div>';
+    }
+
+    document.getElementById('weekCalendar').innerHTML = html;
+  }
+
+  // Update progress band
+  var currentBand = getLS('user_band', 6.0);
+  document.getElementById('progressBand').textContent = (currentBand || 6.0).toFixed(1);
+
+  renderWeekCalendar();
+
+  // ===== PROFILE =====
+  function updateProfile() {
+    var initial = firstName.charAt(0).toUpperCase();
+    document.getElementById('profileAvatar').textContent = initial;
+    document.getElementById('profileName').textContent = fullName;
+
+    // Member since
+    if (memberSince) {
+      var parts = memberSince.split('-');
+      var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      var monthIdx = parseInt(parts[1], 10) - 1;
+      document.getElementById('profileSince').textContent = 'Member since ' + months[monthIdx] + ' ' + parts[0];
+    }
+
+    document.getElementById('profileStreak').textContent = streak;
+    document.getElementById('profileTests').textContent = testsDone;
+    document.getElementById('profileBestBand').textContent = bestBand || 0;
+
+    // Goal progress: current band towards 7.0
+    var goalBand = currentBand || 6.0;
+    var goalPct = Math.min(Math.round((goalBand / 7.0) * 100), 100);
+    document.getElementById('goalPercent').textContent = goalPct + '%';
+    document.getElementById('goalBar').style.width = goalPct + '%';
+
+    // Settings
+    document.getElementById('settingReminder').checked = settings.reminder !== false;
+    document.getElementById('settingStreak').checked = settings.streak !== false;
+    document.getElementById('settingNewTests').checked = settings.newTests === true;
+  }
+
+  window.saveSetting = function(key, value) {
+    settings[key] = value;
+    setLS('user_settings', settings);
+  };
+
+  updateProfile();
+
+  // ===== CHART RESIZE =====
+  var resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+      if (document.getElementById('tab-progress').classList.contains('active')) {
+        renderChart();
+      }
+    }, 150);
+  });
+
+})();
+</script>
+</body>
+</html>
