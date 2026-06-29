@@ -427,6 +427,7 @@ body.dark .q-option.selected{background:rgba(0,196,255,.1);border-color:rgba(0,1
   <div class="res-actions">
     <button class="res-btn res-btn-primary" onclick="reviewMode()">📖 Review Answers</button>
     <button class="res-btn res-btn-secondary" onclick="restartTest()">🔄 New Attempt</button>
+    <button class="res-btn res-btn-primary" onclick="window.location.href='index.html'" style="background:#0f2744">🏠 Back to Home</button>
     <a class="tg-btn" href="https://t.me/mockieltstest" target="_blank">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 13.617l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.828.942z"/></svg>
       More Tests on Telegram
@@ -501,10 +502,10 @@ let currentSection=0, userAnswers={}, flags={}, timerSec=1800,
     timerInt=null, testDone=false, reviewModeOn=false;
 let audioElements=[null,null,null,null];
 let audioURLs=[
-  'https://drive.google.com/uc?id=1h8tZSJWUrDeOmV5e0h84oNkKBG8mW6u4&export=download',
-  'https://drive.google.com/uc?id=1ErllvU9Sq0PB90OfEpbUpwuNfkWuokNh&export=download',
-  'https://drive.google.com/uc?id=1OJ_DomGdnZAuuzLaYFEPiTdnlBc4R2ke&export=download',
-  'https://drive.google.com/uc?id=1E-kuIrpSJV1wQxsQqtCcETNBuLrP8ZbI&export=download'
+  'listening_test1_s1.mp3',
+  'listening_test1_s2.mp3',
+  'listening_test1_s3.mp3',
+  'listening_test1_s4.mp3'
 ];
 let sectionPlayed=[false,false,false,false];
 let sectionDone=[false,false,false,false];

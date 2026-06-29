@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>IELTS Academic Reading Mock Test 5</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -138,7 +138,7 @@ body.dark .q-option.selected{background:rgba(0,196,255,.1);border-color:rgba(0,1
 .pb-letter{font-weight:800;color:var(--accent);min-width:14px}
 
 /* PALETTE */
-#palette-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1.5px solid var(--border);padding:5px 10px;z-index:800;display:flex;align-items:center;gap:4px;overflow-x:auto;height:44px}
+#palette-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1.5px solid var(--border);padding:5px 10px env(safe-area-inset-bottom,8px);z-index:800;display:flex;align-items:center;gap:4px;overflow-x:auto;min-height:44px}
 #palette-bar::-webkit-scrollbar{height:3px}
 #palette-bar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 .pal-label{font-size:10px;color:var(--text3);font-weight:700;white-space:nowrap;flex-shrink:0;text-transform:uppercase;letter-spacing:.4px}
@@ -222,7 +222,7 @@ body.dark .q-option.selected{background:rgba(0,196,255,.1);border-color:rgba(0,1
 ::-webkit-scrollbar-track{background:transparent}
 
 @media(max-width:768px){
-  #main{flex-direction:column;height:calc(100vh - 96px)}
+  #main{flex-direction:column;height:calc(100vh - 52px - 56px - env(safe-area-inset-bottom,8px));height:calc(100dvh - 52px - 56px - env(safe-area-inset-bottom,8px))}
   #passage-panel{height:50%;border-bottom:2px solid var(--border);padding:14px}
   #questions-panel{width:100%;height:50%}
   #splitter{width:100%;height:7px;cursor:row-resize}
@@ -367,6 +367,7 @@ body.dark .q-option.selected{background:rgba(0,196,255,.1);border-color:rgba(0,1
   <div class="res-actions">
     <button class="res-btn res-btn-primary" onclick="reviewMode()">📖 Review Answers</button>
     <button class="res-btn res-btn-secondary" onclick="restartTest()">🔄 New Attempt</button>
+    <button class="res-btn res-btn-primary" onclick="window.location.href='index.html'" style="background:#0f2744">🏠 Back to Home</button>
     <a class="tg-btn" href="https://t.me/mockieltstest" target="_blank">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 13.617l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.828.942z"/></svg>
       More Tests on Telegram
