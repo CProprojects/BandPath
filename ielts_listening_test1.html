@@ -65,13 +65,6 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:var(--bg);colo
 .sbtn.active{border-color:var(--accent);background:var(--accent);color:#fff}
 .sbtn-fs{min-width:34px;text-align:center}
 
-/* AUDIO MANAGER (hidden, teacher-only) */
-#audio-manager{display:none;position:fixed;top:58px;left:12px;background:var(--bg2);border:2px solid var(--accent);border-radius:12px;padding:18px;z-index:2000;min-width:320px;box-shadow:0 8px 30px rgba(0,0,0,.3)}
-#audio-manager h3{font-size:13px;margin-bottom:14px;color:var(--accent);border-bottom:1px solid var(--border);padding-bottom:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px}
-.am-row{margin-bottom:12px}
-.am-label{font-size:12px;color:var(--text2);margin-bottom:5px;font-weight:600}
-.am-file{font-size:12px;width:100%;padding:6px;border:1.5px dashed var(--border);border-radius:6px;background:var(--bg);color:var(--text);cursor:pointer}
-.am-status{font-size:11px;color:var(--accent2);margin-top:3px}
 
 /* MAIN LAYOUT */
 #main{margin-top:52px;display:flex;height:calc(100vh - 96px);overflow:hidden}
@@ -265,15 +258,6 @@ body.dark .q-option.selected{background:rgba(0,196,255,.1);border-color:rgba(0,1
   </div>
 </div>
 
-<!-- AUDIO MANAGER (Ctrl+Shift+A) -->
-<div id="audio-manager">
-  <h3>🔊 Audio Manager — Teacher Only</h3>
-  <div class="am-row"><div class="am-label">Part 1 — Apartments in Arillas</div><input type="file" class="am-file" accept="audio/*" onchange="loadAudio(0,this)"><div class="am-status" id="am-status-0">No audio loaded</div></div>
-  <div class="am-row"><div class="am-label">Part 2 — Ski Resorts & Travel</div><input type="file" class="am-file" accept="audio/*" onchange="loadAudio(1,this)"><div class="am-status" id="am-status-1">No audio loaded</div></div>
-  <div class="am-row"><div class="am-label">Part 3 — Nursing Program</div><input type="file" class="am-file" accept="audio/*" onchange="loadAudio(2,this)"><div class="am-status" id="am-status-2">No audio loaded</div></div>
-  <div class="am-row"><div class="am-label">Part 4 — Dinner & Environment</div><input type="file" class="am-file" accept="audio/*" onchange="loadAudio(3,this)"><div class="am-status" id="am-status-3">No audio loaded</div></div>
-  <button onclick="document.getElementById('audio-manager').style.display='none'" style="width:100%;background:var(--bg3);color:var(--text);border:1.5px solid var(--border);padding:8px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:700;margin-top:4px">Close</button>
-</div>
 
 <!-- HEADER -->
 <div id="header">
@@ -370,9 +354,6 @@ body.dark .q-option.selected{background:rgba(0,196,255,.1);border-color:rgba(0,1
       <div class="replay-warning" id="replay-warn-3">⚠ Each section plays once only!</div>
     </div>
 
-    <div style="margin-top:14px;padding:10px;background:var(--bg3);border-radius:8px;font-size:11px;color:var(--text3);line-height:1.6">
-      💡 <strong>Tip:</strong> Load audio files via <strong>Ctrl+Shift+A</strong> (teacher panel) or use the embed script before distributing.
-    </div>
   </div>
 
   <div id="splitter"></div>
@@ -600,13 +581,6 @@ function initAudio(idx,src){
   audio.onerror=()=>{st.className='ap-status no-audio';st.textContent='Load error';};
 }
 
-function loadAudio(idx,input){
-  const file=input.files[0];if(!file)return;
-  const url=URL.createObjectURL(file);
-  audioURLs[idx]=url;
-  initAudio(idx,url);
-  document.getElementById('am-status-'+idx).textContent='✓ Loaded: '+file.name;
-}
 
 function playSection(idx){
   const audio=audioElements[idx];
@@ -1183,7 +1157,6 @@ window.onload=()=>{
   if(th==='dark'){document.body.className='dark';document.querySelectorAll('.sbtn[onclick*="setTheme"]').forEach((b,i)=>b.classList.toggle('active',i===1));}
   document.addEventListener('keydown',e=>{
     if(e.ctrlKey&&e.key==='n'){e.preventDefault();toggleNotes();}
-    if(e.ctrlKey&&e.shiftKey&&e.key==='A'){e.preventDefault();const am=document.getElementById('audio-manager');am.style.display=am.style.display==='block'?'none':'block';}
   });
   document.addEventListener('click',e=>{
     if(!document.getElementById('settings-panel').contains(e.target)&&!e.target.closest('.hbtn[onclick*="toggleSettings"]'))
