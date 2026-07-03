@@ -2,1604 +2,630 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>BandPath - IELTS Prep</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 <style>
-*, *::before, *::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-:root {
-  --bg-primary: #0a1929;
-  --bg-secondary: #0f2744;
-  --bg-card: #132f4c;
-  --accent: #00C4FF;
-  --accent-glow: rgba(0, 196, 255, 0.15);
-  --text-primary: #ffffff;\
-  --text-muted: #b2bac2;
-  --text-dim: #5a6a7a;
-  --green: #2ecc71;
-  --orange: #f39c12;
-  --red: #e74c3c;
-  --nav-height: 68px;
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
-}
-
-html, body {
-  height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  overflow: hidden;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-font-smoothing: antialiased;
-}
-
-body {
-  display: flex;
-  flex-direction: column;
-}
-
-.app-container {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 16px);
-  -webkit-overflow-scrolling: touch;
-}
-
-.tab-content {
-  display: none;
-  padding: 20px 16px;
-  animation: fadeIn 0.25s ease;
-}
-
-.tab-content.active {
-  display: block;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Bottom Navigation */
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: calc(var(--nav-height) + var(--safe-bottom));
-  padding-bottom: var(--safe-bottom);
-  background: var(--bg-secondary);
-  border-top: 1px solid rgba(255,255,255,0.06);
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  z-index: 100;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-.nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 12px;
-  cursor: pointer;
-  transition: all 0.2s;
-  -webkit-tap-highlight-color: transparent;
-  border: none;
-  background: none;
-  color: var(--text-dim);
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.3px;
-}
-
-.nav-item svg {
-  width: 24px;
-  height: 24px;
-  fill: var(--text-dim);
-  transition: fill 0.2s;
-}
-
-.nav-item.active {
-  color: var(--accent);
-}
-
-.nav-item.active svg {
-  fill: var(--accent);
-}
-
-/* Cards */
-.card {
-  background: var(--bg-card);
-  border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 16px;
-  border: 1px solid rgba(255,255,255,0.04);
-}
-
-.card-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  margin-bottom: 16px;
-}
-
-/* HOME TAB */
-.greeting {
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 4px;
-  line-height: 1.3;
-}
-
-.greeting-sub {
-  font-size: 15px;
-  color: var(--text-muted);
-  margin-bottom: 24px;
-}
-
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.stat-box {
-  background: var(--bg-card);
-  border-radius: 14px;
-  padding: 16px 12px;
-  text-align: center;
-  border: 1px solid rgba(255,255,255,0.04);
-}
-
-.stat-icon {
-  font-size: 24px;
-  margin-bottom: 6px;
-}
-
-.stat-value {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.stat-label {
-  font-size: 11px;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-top: 2px;
-}
-
-.task-item {
-  display: flex;
-  align-items: center;
-  padding: 14px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.task-item:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-.task-checkbox {
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  border: 2px solid var(--text-dim);
-  margin-right: 14px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-}
-
-.task-checkbox.checked {
-  background: var(--accent);
-  border-color: var(--accent);
-}
-
-.task-checkbox.checked::after {
-  content: '';
-  width: 6px;
-  height: 10px;
-  border: solid var(--bg-primary);
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-  margin-top: -2px;
-}
-
-.task-text {
-  font-size: 15px;
-  color: var(--text-primary);
-  flex: 1;
-}
-
-.task-text.completed {
-  text-decoration: line-through;
-  color: var(--text-dim);
-}
-
-.task-xp {
-  font-size: 12px;
-  color: var(--accent);
-  font-weight: 600;
-  margin-left: 8px;
-}
-
-.btn-primary {
-  width: 100%;
-  padding: 16px;
-  background: linear-gradient(135deg, var(--accent), #0099cc);
-  color: var(--bg-primary);
-  border: none;
-  border-radius: 14px;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.15s;
-  letter-spacing: 0.3px;
-  margin-top: 8px;
-}
-
-.btn-primary:active {
-  transform: scale(0.97);
-}
-
-/* VOCAB TAB */
-.vocab-stats {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 20px;
-}
-
-.vocab-stat {
-  flex: 1;
-  text-align: center;
-  padding: 12px 8px;
-  background: var(--bg-card);
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.04);
-}
-
-.vocab-stat-value {
-  font-size: 22px;
-  font-weight: 700;
-}
-
-.vocab-stat-value.green { color: var(--green); }
-.vocab-stat-value.orange { color: var(--orange); }
-.vocab-stat-value.blue { color: var(--accent); }
-
-.vocab-stat-label {
-  font-size: 11px;
-  color: var(--text-dim);
-  margin-top: 2px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
-
-.flashcard {
-  background: var(--bg-card);
-  border-radius: 20px;
-  padding: 32px 24px;
-  text-align: center;
-  border: 1px solid rgba(0,196,255,0.1);
-  margin-bottom: 16px;
-  min-height: 280px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.flashcard-word {
-  font-size: 32px;
-  font-weight: 700;
-  margin-bottom: 8px;
-  color: var(--text-primary);
-}
-
-.flashcard-phonetic {
-  font-size: 14px;
-  color: var(--accent);
-  margin-bottom: 20px;
-  font-style: italic;
-}
-
-.flashcard-def {
-  font-size: 16px;
-  color: var(--text-muted);
-  line-height: 1.5;
-  margin-bottom: 16px;
-}
-
-.flashcard-example {
-  font-size: 14px;
-  color: var(--text-dim);
-  font-style: italic;
-  line-height: 1.5;
-  margin-bottom: 12px;
-  padding: 12px;
-  background: rgba(255,255,255,0.03);
-  border-radius: 10px;
-}
-
-.flashcard-source {
-  font-size: 12px;
-  color: var(--text-dim);
-  opacity: 0.7;
-}
-
-.flashcard-counter {
-  text-align: center;
-  font-size: 14px;
-  color: var(--text-dim);
-  margin-bottom: 16px;
-  font-weight: 500;
-}
-
-.rating-buttons {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.rating-btn {
-  padding: 14px;
-  border: none;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.15s, opacity 0.15s;
-  letter-spacing: 0.3px;
-}
-
-.rating-btn:active {
-  transform: scale(0.95);
-}
-
-.rating-btn.hard {
-  background: rgba(231,76,60,0.15);
-  color: var(--red);
-}
-
-.rating-btn.okay {
-  background: rgba(243,156,18,0.15);
-  color: var(--orange);
-}
-
-.rating-btn.easy {
-  background: rgba(46,204,113,0.15);
-  color: var(--green);
-}
-
-/* TESTS TAB */
-.filter-row {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 20px;
-  overflow-x: auto;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.filter-row::-webkit-scrollbar { display: none; }
-
-.filter-btn {
-  padding: 10px 20px;
-  border-radius: 24px;
-  border: 1px solid rgba(255,255,255,0.08);
-  background: transparent;
-  color: var(--text-muted);
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s;
-  flex-shrink: 0;
-}
-
-.filter-btn.active {
-  background: var(--accent);
-  color: var(--bg-primary);
-  border-color: var(--accent);
-  font-weight: 600;
-}
-
-.test-card {
-  display: flex;
-  align-items: center;
-  background: var(--bg-card);
-  border-radius: 14px;
-  padding: 16px;
-  margin-bottom: 10px;
-  cursor: pointer;
-  transition: transform 0.15s, background 0.15s;
-  border: 1px solid rgba(255,255,255,0.04);
-  -webkit-tap-highlight-color: transparent;
-}
-
-.test-card:active {
-  transform: scale(0.98);
-  background: rgba(19,47,76,0.8);
-}
-
-.test-card.locked {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.test-card.locked:active {
-  transform: none;
-  background: var(--bg-card);
-}
-
-.test-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  margin-right: 14px;
-  flex-shrink: 0;
-}
-
-.test-icon.reading {
-  background: rgba(0,196,255,0.12);
-}
-
-.test-icon.listening {
-  background: rgba(243,156,18,0.12);
-}
-
-.test-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.test-name {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 4px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.test-meta {
-  font-size: 12px;
-  color: var(--text-dim);
-}
-
-.test-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 6px;
-  margin-left: 10px;
-  flex-shrink: 0;
-}
-
-.badge {
-  padding: 4px 10px;
-  border-radius: 8px;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.badge.medium {
-  background: rgba(243,156,18,0.15);
-  color: var(--orange);
-}
-
-.badge.hard {
-  background: rgba(231,76,60,0.15);
-  color: var(--red);
-}
-
-.test-score {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--accent);
-}
-
-.lock-icon {
-  font-size: 18px;
-  color: var(--text-dim);
-}
-
-/* PROGRESS TAB */
-.band-display {
-  text-align: center;
-  padding: 32px 0 24px;
-}
-
-.band-label {
-  font-size: 14px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 8px;
-}
-
-.band-score {
-  font-size: 64px;
-  font-weight: 800;
-  color: var(--accent);
-  line-height: 1;
-  text-shadow: 0 0 40px rgba(0,196,255,0.3);
-}
-
-.band-score-sub {
-  font-size: 14px;
-  color: var(--text-dim);
-  margin-top: 8px;
-}
-
-.chart-container {
-  position: relative;
-  width: 100%;
-  height: 200px;
-  margin-bottom: 8px;
-}
-
-.chart-container canvas {
-  width: 100% !important;
-  height: 100% !important;
-}
-
-.accuracy-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 14px;
-}
-
-.accuracy-item:last-child {
-  margin-bottom: 0;
-}
-
-.accuracy-label {
-  width: 90px;
-  font-size: 13px;
-  color: var(--text-muted);
-  flex-shrink: 0;
-}
-
-.accuracy-bar-bg {
-  flex: 1;
-  height: 8px;
-  background: rgba(255,255,255,0.06);
-  border-radius: 4px;
-  margin: 0 12px;
-  overflow: hidden;
-}
-
-.accuracy-bar {
-  height: 100%;
-  border-radius: 4px;
-  transition: width 0.6s ease;
-}
-
-.accuracy-value {
-  width: 40px;
-  font-size: 14px;
-  font-weight: 600;
-  text-align: right;
-  flex-shrink: 0;
-}
-
-.week-calendar {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.day-cell {
-  text-align: center;
-  padding: 10px 4px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.03);
-}
-
-.day-cell .day-label {
-  font-size: 11px;
-  color: var(--text-dim);
-  margin-bottom: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
-
-.day-cell .day-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.08);
-  margin: 0 auto;
-}
-
-.day-cell.active .day-dot {
-  background: var(--green);
-  box-shadow: 0 0 8px rgba(46,204,113,0.4);
-}
-
-.day-cell.today {
-  background: var(--accent-glow);
-  border: 1px solid rgba(0,196,255,0.2);
-}
-
-.day-cell.today .day-label {
-  color: var(--accent);
-  font-weight: 600;
-}
-
-/* PROFILE TAB */
-.profile-header {
-  text-align: center;
-  padding: 24px 0 20px;
-}
-
-.avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), #0066cc);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 34px;
-  font-weight: 700;
-  color: #fff;
-  margin: 0 auto 14px;
-  box-shadow: 0 4px 24px rgba(0,196,255,0.25);
-}
-
-.profile-name {
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-
-.profile-since {
-  font-size: 13px;
-  color: var(--text-dim);
-}
-
-.profile-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.profile-stat {
-  text-align: center;
-  padding: 16px 8px;
-  background: var(--bg-card);
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.04);
-}
-
-.profile-stat-value {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--accent);
-}
-
-.profile-stat-label {
-  font-size: 11px;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  margin-top: 4px;
-}
-
-.goal-card {
-  background: var(--bg-card);
-  border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 16px;
-  border: 1px solid rgba(0,196,255,0.08);
-}
-
-.goal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 14px;
-}
-
-.goal-title {
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.goal-value {
-  font-size: 14px;
-  color: var(--accent);
-  font-weight: 600;
-}
-
-.goal-bar-bg {
-  width: 100%;
-  height: 10px;
-  background: rgba(255,255,255,0.06);
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.goal-bar {
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent), #0099cc);
-  border-radius: 5px;
-  transition: width 0.6s ease;
-}
-
-.settings-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-}
-
-.settings-item:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-.settings-label {
-  font-size: 15px;
-  color: var(--text-primary);
-}
-
-.toggle {
-  position: relative;
-  width: 48px;
-  height: 28px;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.toggle input {
-  display: none;
-}
-
-.toggle-slider {
-  position: absolute;
-  inset: 0;
-  background: rgba(255,255,255,0.1);
-  border-radius: 14px;
-  transition: background 0.25s;
-}
-
-.toggle-slider::after {
-  content: '';
-  position: absolute;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: #fff;
-  top: 3px;
-  left: 3px;
-  transition: transform 0.25s;
-}
-
-.toggle input:checked + .toggle-slider {
-  background: var(--accent);
-}
-
-.toggle input:checked + .toggle-slider::after {
-  transform: translateX(20px);
-}
-
-/* Section title */
-.section-title {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 16px;
-}
-
-/* Scrollbar */
-.app-container::-webkit-scrollbar {
-  width: 0;
-}
-
-/* Fullscreen button */
-.fullscreen-btn {
-  position: fixed;
-  top: 12px;
-  right: 12px;
-  z-index: 999;
-  background: var(--bg-card);
-  border: 1px solid rgba(255,255,255,0.1);
-  color: var(--accent);
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  cursor: pointer;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  transition: background 0.2s;
-}
-.fullscreen-btn:active { background: var(--bg-secondary); }
-.fullscreen-btn.show { display: flex; }
-
-/* Responsive */
-@media (min-width: 768px) {
-  .tab-content {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 24px 32px;
-  }
-}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#07111f;--bg2:#0a1d33;--card:rgba(22,45,74,.55);
+  --accent:#00C4FF;--green:#2ed573;--orange:#ffa502;--red:#ff6b6b;
+  --text:#fff;--text2:rgba(255,255,255,.7);--text3:rgba(255,255,255,.42);
+  --border:rgba(255,255,255,.07);
+  --nav-h:68px;--safe-b:env(safe-area-inset-bottom,0px);
+}
+html,body{height:100%;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);overflow:hidden;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased;}
+body{display:flex;flex-direction:column;}
+.app{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:calc(var(--nav-h) + var(--safe-b) + 16px);-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.app::-webkit-scrollbar{display:none;}
+.tab{display:none;}
+.tab.active{display:block;}
+.tab-bg{min-height:100%;background:radial-gradient(130% 80% at 50% -5%,#102e4d 0%,#0a1d33 50%,#07111f 100%);padding:50px 18px 20px;position:relative;overflow:hidden;}
+.tab-bg::before{content:'';position:absolute;top:-60px;right:-40px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(0,196,255,.22),transparent 65%);filter:blur(8px);pointer-events:none;}
+
+/* NAV */
+.nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + var(--safe-b));padding-bottom:var(--safe-b);background:linear-gradient(180deg,rgba(10,30,53,.6),#0a1e35 40%);border-top:1px solid var(--border);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);display:flex;align-items:flex-start;justify-content:space-around;padding-top:11px;z-index:100;}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;background:none;border:none;color:var(--text3);font-family:inherit;font-size:9.5px;font-weight:600;position:relative;padding:0 10px;-webkit-tap-highlight-color:transparent;}
+.nav-item i{width:20px;height:20px;}
+.nav-item.active{color:var(--accent);}
+.nav-item.active i{filter:drop-shadow(0 0 6px rgba(0,196,255,.6));}
+.nav-item.active::before{content:'';position:absolute;top:-11px;left:50%;transform:translateX(-50%);width:32px;height:3px;border-radius:3px;background:var(--accent);box-shadow:0 0 10px rgba(0,196,255,.9);}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:12px;}
+.stat-card{border-radius:17px;padding:13px 9px;}
+.stat-card.flame{background:linear-gradient(165deg,rgba(255,165,2,.14),rgba(22,45,74,.55));border:1px solid rgba(255,165,2,.18);}
+.stat-card.xp{background:linear-gradient(165deg,rgba(46,213,115,.13),rgba(22,45,74,.55));border:1px solid rgba(46,213,115,.18);}
+.stat-card.rank{background:linear-gradient(165deg,rgba(0,196,255,.13),rgba(22,45,74,.55));border:1px solid rgba(0,196,255,.18);}
+.stat-num{font-weight:800;font-size:24px;line-height:1.1;margin-top:7px;letter-spacing:-.5px;}
+.stat-label{color:var(--text3);font-size:10px;font-weight:600;}
+.stat-card.flame .stat-num{color:#ffa502;}
+.stat-card.xp .stat-num{color:var(--green);}
+.stat-card.rank .stat-num{color:#5fdcff;font-size:20px;}
+
+/* BAND RING */
+.band-card{position:relative;overflow:hidden;border-radius:20px;padding:18px;margin-bottom:12px;background:linear-gradient(150deg,rgba(0,196,255,.14),rgba(22,45,74,.7));border:1px solid rgba(0,196,255,.2);box-shadow:0 18px 40px -22px rgba(0,196,255,.45);display:flex;align-items:center;gap:16px;}
+.band-ring-wrap{position:relative;width:70px;height:70px;flex-shrink:0;}
+.band-ring-wrap svg{transform:rotate(-90deg);}
+.band-ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.band-ring-val{color:#fff;font-weight:800;font-size:20px;letter-spacing:-.5px;}
+.band-ring-lbl{color:var(--text3);font-size:7.5px;font-weight:600;letter-spacing:.8px;}
+
+/* CARDS */
+.card{border-radius:20px;padding:16px;margin-bottom:12px;background:var(--card);border:1px solid var(--border);}
+.card-title{color:#fff;font-weight:700;font-size:14px;margin-bottom:13px;}
+
+/* TASKS */
+.task-row{display:flex;align-items:center;gap:11px;margin-bottom:11px;cursor:pointer;}
+.task-row:last-child{margin-bottom:0;}
+.task-check{width:22px;height:22px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:2px solid var(--border);transition:all .3s;}
+.task-check.done{background:var(--green);border-color:var(--green);box-shadow:0 0 14px -2px rgba(46,213,115,.7);}
+.task-text{flex:1;color:#fff;font-size:13px;font-weight:600;}
+.task-text.done{color:var(--text3);text-decoration:line-through;text-decoration-color:rgba(255,255,255,.25);}
+.task-xp{color:var(--orange);font-size:11.5px;font-weight:700;}
+
+/* VOCAB */
+.fc-card{position:relative;overflow:hidden;border-radius:22px;padding:20px 18px;margin-bottom:12px;background:linear-gradient(155deg,#0d3a5c,#0a2d4a);border:1px solid rgba(0,196,255,.28);box-shadow:0 22px 48px -20px rgba(0,196,255,.5);}
+.fc-tag{font-size:9.5px;font-weight:700;letter-spacing:1px;color:#5fdcff;}
+.fc-word{color:#fff;font-weight:800;font-size:27px;letter-spacing:-.5px;margin-top:10px;}
+.fc-phonetic{color:var(--text3);font-size:13px;font-weight:500;margin-top:4px;}
+.fc-def{color:rgba(255,255,255,.82);font-size:13.5px;line-height:1.5;font-weight:500;margin-top:10px;}
+.fc-example{border-radius:13px;padding:12px 13px;margin-top:14px;background:rgba(7,17,31,.45);border-left:3px solid var(--accent);color:var(--text3);font-size:12.5px;font-style:italic;line-height:1.5;}
+.fc-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:16px;}
+.fc-btn{border-radius:13px;padding:11px 0;font-family:inherit;font-weight:700;font-size:12.5px;cursor:pointer;}
+.fc-btn.hard{border:1px solid rgba(255,107,107,.3);background:rgba(255,107,107,.12);color:#ff8787;}
+.fc-btn.okay{border:1px solid rgba(255,165,2,.3);background:rgba(255,165,2,.12);color:#ffb938;}
+.fc-btn.easy{border:1px solid rgba(46,213,115,.3);background:rgba(46,213,115,.12);color:#4fe08c;}
+
+/* TESTS */
+.filter-row{display:flex;gap:8px;margin-bottom:16px;}
+.filter-btn{border-radius:99px;padding:8px 16px;font-family:inherit;font-weight:700;font-size:12.5px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text3);transition:all .2s;}
+.filter-btn.active{border:none;background:linear-gradient(120deg,var(--accent),#0098e0);color:#06243c;box-shadow:0 8px 20px -8px rgba(0,196,255,.7);}
+.test-item{display:flex;align-items:center;gap:13px;border-radius:17px;padding:14px;background:var(--card);border:1px solid var(--border);margin-bottom:10px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.test-item.locked{opacity:.5;cursor:default;}
+.test-item.done{box-shadow:inset 3px 0 0 var(--green);}
+.test-icon{width:44px;height:44px;border-radius:13px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(0,196,255,.14);color:#5fdcff;}
+.test-name{color:#fff;font-weight:700;font-size:14px;}
+.test-meta{display:flex;align-items:center;gap:7px;margin-top:4px;}
+.test-meta-lbl{color:var(--text3);font-size:10.5px;font-weight:500;}
+.badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;}
+.badge.easy{color:#4fe08c;background:rgba(46,213,115,.14);}
+.badge.medium{color:#ffb938;background:rgba(255,165,2,.14);}
+.badge.hard{color:#ff8787;background:rgba(255,107,107,.14);}
+.test-right{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+.test-score{color:var(--green);font-weight:800;font-size:16px;}
+
+/* BARS */
+.bar-row{margin-bottom:13px;}
+.bar-row:last-child{margin-bottom:0;}
+.bar-header{display:flex;justify-content:space-between;margin-bottom:6px;}
+.bar-label{color:rgba(255,255,255,.7);font-size:12px;font-weight:600;}
+.bar-pct{font-size:12px;font-weight:700;}
+.bar-bg{height:7px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden;}
+.bar-fill{height:100%;border-radius:4px;transition:width .8s ease;}
+
+/* PROFILE */
+.profile-avatar{width:74px;height:74px;border-radius:24px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:24px;color:#06243c;background:linear-gradient(150deg,#5fe1ff,#00a6e6);box-shadow:0 0 36px -6px rgba(0,196,255,.7),0 0 0 3px rgba(0,196,255,.25);}
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:22px 0 12px;}
+.profile-stat{border-radius:16px;padding:14px 9px;text-align:center;background:var(--card);border:1px solid var(--border);}
+.profile-stat-val{font-weight:800;font-size:22px;}
+.profile-stat-lbl{color:var(--text3);font-size:9.5px;font-weight:600;margin-top:2px;}
+.tog{width:40px;height:23px;border-radius:99px;position:relative;cursor:pointer;transition:background .25s;flex-shrink:0;}
+.tog.on{background:var(--accent);box-shadow:0 0 12px -2px rgba(0,196,255,.7);}
+.tog.off{background:rgba(255,255,255,.12);}
+.tog-knob{position:absolute;top:2.5px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .25s;}
+.tog.on .tog-knob{left:calc(100% - 20.5px);}
+.tog.off .tog-knob{left:2.5px;}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);}
+.toggle-row:last-child{border-bottom:none;padding-bottom:0;}
+
+/* ANIMATIONS */
+@keyframes flicker{0%,100%{opacity:1;transform:scale(1)}45%{opacity:.82;transform:scale(.94) rotate(-3deg)}70%{opacity:.95;transform:scale(1.05)}}
+@keyframes floatglow{0%,100%{opacity:.5;transform:translate(0,0)}50%{opacity:.85;transform:translate(10px,-14px)}}
+.flame-ani{animation:flicker 2.2s ease-in-out infinite;transform-origin:center bottom;display:inline-block;}
 </style>
 </head>
 <body>
 
-<button class="fullscreen-btn" id="fullscreenBtn" onclick="window.goFullscreen()" title="Fullscreen">&#x26F6;</button>
-<div class="app-container" id="appContainer">
+<div class="app" id="appEl">
 
-  <!-- HOME TAB -->
-  <div class="tab-content active" id="tab-home">
-    <div class="greeting" id="greetingText">Good morning,</div>
-    <div class="greeting-sub">Let's boost your IELTS score today</div>
-
-    <div class="stats-row">
-      <div class="stat-box">
-        <div class="stat-icon">&#128293;</div>
-        <div class="stat-value" id="statStreak">0</div>
-        <div class="stat-label">Streak</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-icon">&#9889;</div>
-        <div class="stat-value" id="statXP">0</div>
-        <div class="stat-label">XP</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-icon">&#127919;</div>
-        <div class="stat-value" id="statBand">0</div>
-        <div class="stat-label">Band</div>
-      </div>
+<!-- ===== HOME ===== -->
+<div class="tab active" id="tab-home">
+<div class="tab-bg">
+  <div style="display:flex;align-items:center;gap:11px;margin-bottom:20px;">
+    <div id="homeAvatar" style="width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#06243c;background:linear-gradient(150deg,#5fe1ff,#00a6e6);box-shadow:0 8px 22px -6px rgba(0,196,255,.6);flex-shrink:0;">?</div>
+    <div style="flex:1;min-width:0;">
+      <div id="homeUser" style="color:#fff;font-weight:700;font-size:16px;letter-spacing:-.2px;">Loading...</div>
+      <div style="color:var(--text3);font-size:11px;font-weight:500;margin-top:2px;">IELTS Prep · BandPath</div>
     </div>
-
-    <div class="card">
-      <div class="card-title">Today's Tasks</div>
-      <div class="task-item" onclick="window.toggleTask(0)">
-        <div class="task-checkbox" id="taskCheck0"></div>
-        <span class="task-text" id="taskText0">Vocabulary review (20 words)</span>
-        <span class="task-xp">+10 XP</span>
-      </div>
-      <div class="task-item" onclick="window.toggleTask(1)">
-        <div class="task-checkbox" id="taskCheck1"></div>
-        <span class="task-text" id="taskText1">Reading passage 1</span>
-        <span class="task-xp">+10 XP</span>
-      </div>
-      <div class="task-item" onclick="window.toggleTask(2)">
-        <div class="task-checkbox" id="taskCheck2"></div>
-        <span class="task-text" id="taskText2">Full mock test</span>
-        <span class="task-xp">+10 XP</span>
-      </div>
-    </div>
-
-    <button class="btn-primary" onclick="window.switchTab('tests')">Start Practice</button>
+    <button onclick="switchTab('profile')" style="width:40px;height:40px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--text2);display:flex;align-items:center;justify-content:center;cursor:pointer;">
+      <i data-lucide="bell" style="width:17px;height:17px;"></i>
+    </button>
   </div>
 
-  <!-- VOCABULARY TAB -->
-  <div class="tab-content" id="tab-vocab">
-    <div class="section-title">Vocabulary</div>
-
-    <div class="vocab-stats">
-      <div class="vocab-stat">
-        <div class="vocab-stat-value green">142</div>
-        <div class="vocab-stat-label">Learned</div>
-      </div>
-      <div class="vocab-stat">
-        <div class="vocab-stat-value orange">28</div>
-        <div class="vocab-stat-label">Review</div>
-      </div>
-      <div class="vocab-stat">
-        <div class="vocab-stat-value blue">320</div>
-        <div class="vocab-stat-label">Total</div>
-      </div>
+  <div class="stats-grid">
+    <div class="stat-card flame">
+      <div class="flame-ani"><i data-lucide="flame" style="width:21px;height:21px;color:#ffa502;"></i></div>
+      <div class="stat-num" id="statStreak">0</div>
+      <div class="stat-label">Day streak</div>
     </div>
-
-    <div class="flashcard-counter" id="cardCounter">1 / 10</div>
-    <div class="flashcard" id="flashcard">
-      <div class="flashcard-word" id="fcWord"></div>
-      <div class="flashcard-phonetic" id="fcPhonetic"></div>
-      <div class="flashcard-def" id="fcDef"></div>
-      <div class="flashcard-example" id="fcExample"></div>
-      <div class="flashcard-source" id="fcSource"></div>
+    <div class="stat-card xp">
+      <i data-lucide="zap" style="width:21px;height:21px;color:#2ed573;"></i>
+      <div class="stat-num" id="statXP">0</div>
+      <div class="stat-label">XP today</div>
     </div>
-
-    <div class="rating-buttons">
-      <button class="rating-btn hard" onclick="window.rateCard('hard')">Hard</button>
-      <button class="rating-btn okay" onclick="window.rateCard('okay')">Okay</button>
-      <button class="rating-btn easy" onclick="window.rateCard('easy')">Easy</button>
+    <div class="stat-card rank">
+      <i data-lucide="trophy" style="width:21px;height:21px;color:#5fdcff;"></i>
+      <div class="stat-num" id="statBand">-</div>
+      <div class="stat-label">Best band</div>
     </div>
   </div>
 
-  <!-- TESTS TAB -->
-  <div class="tab-content" id="tab-tests">
-    <div class="section-title">Practice Tests</div>
-
-    <div class="filter-row">
-      <button class="filter-btn active" onclick="window.filterTests('all')" id="filterAll">All</button>
-      <button class="filter-btn" onclick="window.filterTests('reading')" id="filterReading">Reading</button>
-      <button class="filter-btn" onclick="window.filterTests('listening')" id="filterListening">Listening</button>
-    </div>
-
-    <div id="testsList"></div>
-  </div>
-
-  <!-- PROGRESS TAB -->
-  <div class="tab-content" id="tab-progress">
-    <div class="section-title">Progress</div>
-
-    <div class="band-display">
-      <div class="band-label">Current Band Score</div>
-      <div class="band-score" id="progressBand">6.0</div>
-      <div class="band-score-sub">Based on your recent tests</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Band Score Trend</div>
-      <div class="chart-container">
-        <canvas id="bandChart"></canvas>
+  <div class="band-card">
+    <div class="band-ring-wrap">
+      <svg viewBox="0 0 80 80" width="70" height="70">
+        <circle cx="40" cy="40" r="33" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="7"/>
+        <circle id="homeRing" cx="40" cy="40" r="33" fill="none" stroke="#00C4FF" stroke-width="7" stroke-linecap="round" stroke-dasharray="207" stroke-dashoffset="207" style="filter:drop-shadow(0 0 6px rgba(0,196,255,.7));transition:stroke-dashoffset 1.5s cubic-bezier(.4,0,.2,1);"/>
+      </svg>
+      <div class="band-ring-center">
+        <span class="band-ring-val" id="ringVal">-</span>
+        <span class="band-ring-lbl">BAND</span>
       </div>
     </div>
-
-    <div class="card">
-      <div class="card-title">Accuracy by Question Type</div>
-      <div class="accuracy-item">
-        <span class="accuracy-label">True / False</span>
-        <div class="accuracy-bar-bg"><div class="accuracy-bar" style="width:72%;background:var(--accent)"></div></div>
-        <span class="accuracy-value" style="color:var(--accent)">72%</span>
-      </div>
-      <div class="accuracy-item">
-        <span class="accuracy-label">MCQ</span>
-        <div class="accuracy-bar-bg"><div class="accuracy-bar" style="width:85%;background:var(--green)"></div></div>
-        <span class="accuracy-value" style="color:var(--green)">85%</span>
-      </div>
-      <div class="accuracy-item">
-        <span class="accuracy-label">Fill-in</span>
-        <div class="accuracy-bar-bg"><div class="accuracy-bar" style="width:64%;background:var(--orange)"></div></div>
-        <span class="accuracy-value" style="color:var(--orange)">64%</span>
-      </div>
-      <div class="accuracy-item">
-        <span class="accuracy-label">Matching</span>
-        <div class="accuracy-bar-bg"><div class="accuracy-bar" style="width:78%;background:var(--accent)"></div></div>
-        <span class="accuracy-value" style="color:var(--accent)">78%</span>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">This Week</div>
-      <div class="week-calendar" id="weekCalendar"></div>
-    </div>
-  </div>
-
-  <!-- PROFILE TAB -->
-  <div class="tab-content" id="tab-profile">
-    <div class="profile-header">
-      <div class="avatar" id="profileAvatar">S</div>
-      <div class="profile-name" id="profileName">Student</div>
-      <div class="profile-since" id="profileSince">Member since June 2026</div>
-    </div>
-
-    <div class="profile-stats">
-      <div class="profile-stat">
-        <div class="profile-stat-value" id="profileStreak">0</div>
-        <div class="profile-stat-label">Day Streak</div>
-      </div>
-      <div class="profile-stat">
-        <div class="profile-stat-value" id="profileTests">0</div>
-        <div class="profile-stat-label">Tests Done</div>
-      </div>
-      <div class="profile-stat">
-        <div class="profile-stat-value" id="profileBestBand">0</div>
-        <div class="profile-stat-label">Best Band</div>
-      </div>
-    </div>
-
-    <div class="goal-card">
-      <div class="goal-header">
-        <span class="goal-title">&#127919; Target: Band 7.0</span>
-        <span class="goal-value" id="goalPercent">86%</span>
-      </div>
-      <div class="goal-bar-bg">
-        <div class="goal-bar" id="goalBar" style="width:86%"></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Notifications</div>
-      <div class="settings-item">
-        <span class="settings-label">Daily Reminder</span>
-        <label class="toggle">
-          <input type="checkbox" id="settingReminder" checked onchange="window.saveSetting('reminder', this.checked)">
-          <span class="toggle-slider"></span>
-        </label>
-      </div>
-      <div class="settings-item">
-        <span class="settings-label">Streak Alerts</span>
-        <label class="toggle">
-          <input type="checkbox" id="settingStreak" checked onchange="window.saveSetting('streak', this.checked)">
-          <span class="toggle-slider"></span>
-        </label>
-      </div>
-      <div class="settings-item">
-        <span class="settings-label">New Tests</span>
-        <label class="toggle">
-          <input type="checkbox" id="settingNewTests" onchange="window.saveSetting('newTests', this.checked)">
-          <span class="toggle-slider"></span>
-        </label>
+    <div style="flex:1;">
+      <div style="color:#fff;font-weight:700;font-size:14px;">Current band estimate</div>
+      <div style="color:var(--text3);font-size:11.5px;font-weight:500;margin-top:3px;">Target: Band 7.0</div>
+      <div style="display:flex;align-items:center;gap:5px;color:var(--green);font-size:11.5px;font-weight:600;margin-top:6px;">
+        <i data-lucide="trending-up" style="width:13px;height:13px;"></i>
+        <span id="weekEst">Complete a test to estimate</span>
       </div>
     </div>
   </div>
 
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;">
+      <div class="card-title" style="margin-bottom:0;">Today's tasks</div>
+      <div id="taskCount" style="color:var(--text3);font-size:11px;font-weight:600;">0 / 3</div>
+    </div>
+    <div class="task-row" onclick="toggleTask(0)">
+      <div class="task-check" id="tc0"></div>
+      <span class="task-text" id="tt0">Vocab review (20 words)</span>
+      <span class="task-xp">+50 XP</span>
+    </div>
+    <div class="task-row" onclick="toggleTask(1)">
+      <div class="task-check" id="tc1"></div>
+      <span class="task-text" id="tt1">Complete a reading test</span>
+      <span class="task-xp">+100 XP</span>
+    </div>
+    <div class="task-row" onclick="toggleTask(2)">
+      <div class="task-check" id="tc2"></div>
+      <span class="task-text" id="tt2">Listen to 1 audio test</span>
+      <span class="task-xp">+200 XP</span>
+    </div>
+  </div>
+</div>
 </div>
 
-<!-- BOTTOM NAV -->
-<nav class="bottom-nav">
-  <button class="nav-item active" onclick="window.switchTab('home')" id="nav-home">
-    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-    <span>Home</span>
-  </button>
-  <button class="nav-item" onclick="window.switchTab('vocab')" id="nav-vocab">
-    <svg viewBox="0 0 24 24"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zm0 13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5z"/></svg>
-    <span>Vocab</span>
-  </button>
-  <button class="nav-item" onclick="window.switchTab('tests')" id="nav-tests">
-    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-    <span>Tests</span>
-  </button>
-  <button class="nav-item" onclick="window.switchTab('progress')" id="nav-progress">
-    <svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>
-    <span>Progress</span>
-  </button>
-  <button class="nav-item" onclick="window.switchTab('profile')" id="nav-profile">
-    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-    <span>Profile</span>
-  </button>
+<!-- ===== VOCAB ===== -->
+<div class="tab" id="tab-vocab">
+<div class="tab-bg">
+  <div class="stats-grid">
+    <div class="card" style="border-radius:16px;padding:13px 9px;text-align:center;border:1px solid rgba(46,213,115,.16);margin-bottom:0;">
+      <div style="color:var(--green);font-weight:800;font-size:24px;" id="vcSeen">0</div>
+      <div style="color:var(--text3);font-size:10px;font-weight:600;margin-top:2px;">Seen</div>
+    </div>
+    <div class="card" style="border-radius:16px;padding:13px 9px;text-align:center;border:1px solid rgba(255,165,2,.16);margin-bottom:0;">
+      <div style="color:var(--orange);font-weight:800;font-size:24px;" id="vcHard">0</div>
+      <div style="color:var(--text3);font-size:10px;font-weight:600;margin-top:2px;">Review</div>
+    </div>
+    <div class="card" style="border-radius:16px;padding:13px 9px;text-align:center;margin-bottom:0;">
+      <div style="color:rgba(255,255,255,.7);font-weight:800;font-size:24px;">10</div>
+      <div style="color:var(--text3);font-size:10px;font-weight:600;margin-top:2px;">Total</div>
+    </div>
+  </div>
+
+  <div class="fc-card" style="margin-top:12px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div class="fc-tag" id="fcTag">NOUN · IELTS</div>
+      <i data-lucide="volume-2" style="width:17px;height:17px;color:var(--text3);"></i>
+    </div>
+    <div class="fc-word" id="fcWord">-</div>
+    <div class="fc-phonetic" id="fcPhonetic">-</div>
+    <div class="fc-def" id="fcDef">-</div>
+    <div class="fc-example" id="fcExample">-</div>
+    <div class="fc-btns">
+      <button class="fc-btn hard" onclick="rateCard('hard')">Hard</button>
+      <button class="fc-btn okay" onclick="rateCard('okay')">Okay</button>
+      <button class="fc-btn easy" onclick="rateCard('easy')">Easy</button>
+    </div>
+  </div>
+  <div style="text-align:center;color:var(--text3);font-size:11px;font-weight:600;margin-top:10px;" id="fcCounter">1 / 10</div>
+  <div style="color:var(--text3);font-size:11px;font-weight:500;margin-top:8px;padding:0 4px;display:flex;align-items:center;gap:5px;">
+    <i data-lucide="map-pin" style="width:12px;height:12px;"></i>
+    <span id="fcSource">-</span>
+  </div>
+</div>
+</div>
+
+<!-- ===== TESTS ===== -->
+<div class="tab" id="tab-tests">
+<div class="tab-bg">
+  <div style="color:#fff;font-weight:800;font-size:22px;letter-spacing:-.4px;margin-bottom:16px;">Test library</div>
+  <div class="filter-row">
+    <button class="filter-btn active" id="filterAll" onclick="filterTests('all')">All</button>
+    <button class="filter-btn" id="filterReading" onclick="filterTests('reading')">Reading</button>
+    <button class="filter-btn" id="filterListening" onclick="filterTests('listening')">Listening</button>
+  </div>
+  <div id="testsList"></div>
+</div>
+</div>
+
+<!-- ===== PROGRESS ===== -->
+<div class="tab" id="tab-progress">
+<div class="tab-bg">
+  <div class="card">
+    <div class="card-title">Band estimate over time</div>
+    <div style="position:relative;height:120px;">
+      <svg id="bandSVG" viewBox="0 0 280 120" preserveAspectRatio="none" style="width:100%;height:100%;"></svg>
+    </div>
+    <div id="bandLabels" style="display:flex;justify-content:space-between;margin-top:8px;color:var(--text3);font-size:9.5px;font-weight:600;"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Accuracy by question type</div>
+    <div class="bar-row">
+      <div class="bar-header"><span class="bar-label">True / False</span><span class="bar-pct" style="color:#4fe08c;" id="acc1">--</span></div>
+      <div class="bar-bg"><div class="bar-fill" id="bar1" style="width:0%;background:#2ed573;"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-header"><span class="bar-label">MCQ</span><span class="bar-pct" style="color:#5fdcff;" id="acc2">--</span></div>
+      <div class="bar-bg"><div class="bar-fill" id="bar2" style="width:0%;background:#00C4FF;"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-header"><span class="bar-label">Fill in the blank</span><span class="bar-pct" style="color:#ffb938;" id="acc3">--</span></div>
+      <div class="bar-bg"><div class="bar-fill" id="bar3" style="width:0%;background:#ffa502;"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-header"><span class="bar-label">Matching</span><span class="bar-pct" style="color:#ff8787;" id="acc4">--</span></div>
+      <div class="bar-bg"><div class="bar-fill" id="bar4" style="width:0%;background:#ff6b6b;"></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Activity calendar</div>
+    <div id="calGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;"></div>
+    <div style="display:flex;gap:14px;margin-top:13px;">
+      <span style="display:flex;align-items:center;gap:5px;color:var(--text3);font-size:10px;font-weight:600;"><span style="width:9px;height:9px;border-radius:3px;background:#00C4FF;display:inline-block;"></span>Active</span>
+      <span style="display:flex;align-items:center;gap:5px;color:var(--text3);font-size:10px;font-weight:600;"><span style="width:9px;height:9px;border-radius:3px;background:var(--green);display:inline-block;"></span>Today</span>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== PROFILE ===== -->
+<div class="tab" id="tab-profile">
+<div class="tab-bg">
+  <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:4px;">
+    <div id="bigAvatar" class="profile-avatar">?</div>
+    <div id="bigName" style="color:#fff;font-weight:800;font-size:20px;letter-spacing:-.3px;margin-top:14px;">-</div>
+    <div id="bigSince" style="color:var(--text3);font-size:12px;font-weight:500;margin-top:4px;">-</div>
+  </div>
+
+  <div class="profile-stats">
+    <div class="profile-stat"><div class="profile-stat-val" style="color:var(--orange);" id="ps1">0</div><div class="profile-stat-lbl">Day streak</div></div>
+    <div class="profile-stat"><div class="profile-stat-val" style="color:#5fdcff;" id="ps2">0</div><div class="profile-stat-lbl">Tests done</div></div>
+    <div class="profile-stat"><div class="profile-stat-val" style="color:var(--green);" id="ps3">-</div><div class="profile-stat-lbl">Best band</div></div>
+  </div>
+
+  <div class="card" style="background:linear-gradient(150deg,rgba(46,213,115,.12),rgba(22,45,74,.6));border:1px solid rgba(46,213,115,.18);margin-bottom:12px;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px;">
+      <i data-lucide="target" style="width:16px;height:16px;color:var(--green);"></i>
+      <span style="color:#fff;font-weight:700;font-size:14px;">Goal tracker</span>
+    </div>
+    <div style="color:#fff;font-size:13px;font-weight:600;">Target: Band 7.0</div>
+    <div id="goalText" style="color:#4fe08c;font-size:12px;font-weight:600;margin-top:4px;">Complete a test to see estimate</div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+      <i data-lucide="bell" style="width:16px;height:16px;color:#5fdcff;"></i>
+      <span style="color:#fff;font-weight:700;font-size:14px;">Notifications</span>
+    </div>
+    <div class="toggle-row">
+      <span style="color:rgba(255,255,255,.78);font-size:12.5px;font-weight:500;">Daily reminder (9:00 AM)</span>
+      <div class="tog on" id="tog0" onclick="toggleSetting(0,'reminder')"><div class="tog-knob"></div></div>
+    </div>
+    <div class="toggle-row">
+      <span style="color:rgba(255,255,255,.78);font-size:12.5px;font-weight:500;">Streak warning</span>
+      <div class="tog on" id="tog1" onclick="toggleSetting(1,'streak')"><div class="tog-knob"></div></div>
+    </div>
+    <div class="toggle-row">
+      <span style="color:rgba(255,255,255,.78);font-size:12.5px;font-weight:500;">New test alerts</span>
+      <div class="tog off" id="tog2" onclick="toggleSetting(2,'newTests')"><div class="tog-knob"></div></div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div><!-- .app -->
+
+<nav class="nav">
+  <button class="nav-item active" id="nav-home" onclick="switchTab('home')"><i data-lucide="home"></i>Home</button>
+  <button class="nav-item" id="nav-vocab" onclick="switchTab('vocab')"><i data-lucide="book-open"></i>Vocab</button>
+  <button class="nav-item" id="nav-tests" onclick="switchTab('tests')"><i data-lucide="pencil"></i>Tests</button>
+  <button class="nav-item" id="nav-progress" onclick="switchTab('progress')"><i data-lucide="bar-chart-3"></i>Progress</button>
+  <button class="nav-item" id="nav-profile" onclick="switchTab('profile')"><i data-lucide="user"></i>Profile</button>
 </nav>
 
 <script>
-(function() {
-  'use strict';
-
-  // ===== TELEGRAM INTEGRATION =====
-  var tg = window.Telegram && window.Telegram.WebApp;
-  var user = { first_name: 'Student', last_name: '', id: 0 };
-
-  if (tg) {
-    try {
-      tg.ready();
-      tg.expand();
-      tg.setHeaderColor('#0a1929');
-      tg.setBackgroundColor('#0a1929');
-      if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-        user = tg.initDataUnsafe.user;
-      }
-    } catch (e) {}
-  }
-
-  // ===== FULLSCREEN SUPPORT =====
-  var fsBtn = document.getElementById('fullscreenBtn');
-  var canTgFullscreen = tg && typeof tg.requestFullscreen === 'function';
-  var canBrowserFullscreen = document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen;
-
-  if (canTgFullscreen || canBrowserFullscreen) {
-    fsBtn.classList.add('show');
-  }
-
-  window.goFullscreen = function() {
-    try {
-      if (canTgFullscreen) {
-        tg.requestFullscreen();
-      } else if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen();
-      } else if (document.documentElement.webkitRequestFullscreen) {
-        document.documentElement.webkitRequestFullscreen();
-      }
-    } catch (e) {}
-  };
-
-  var firstName = user.first_name || 'Student';
-  var fullName = firstName + (user.last_name ? ' ' + user.last_name : '');
-
-  // ===== STORAGE HELPERS =====
-  function getLS(key, fallback) {
-    try {
-      var val = localStorage.getItem('bandpath_' + key);
-      if (val === null) return fallback;
-      return JSON.parse(val);
-    } catch (e) {
-      return fallback;
-    }
-  }
-
-  function setLS(key, val) {
-    try {
-      localStorage.setItem('bandpath_' + key, JSON.stringify(val));
-    } catch (e) {}
-  }
-
-  // ===== INITIALIZE DATA =====
-  var streak = getLS('user_streak', 0);
-  var xp = getLS('user_xp', 0);
-  var band = getLS('user_band', 0);
-  var tasks = getLS('user_tasks_today', [false, false, false]);
-  var settings = getLS('user_settings', { reminder: true, streak: true, newTests: false });
-  var testScores = getLS('user_test_scores', {});
-  var testsDone = getLS('user_tests_done', 0);
-  var bestBand = getLS('user_best_band', 0);
-  var bandHistory = getLS('user_band_history', [5.5, 5.5, 6.0, 6.0, 6.0, 6.5]);
-  var activeDays = getLS('user_active_days', []);
-  var memberSince = getLS('user_member_since', null);
-
-  // Set member since on first visit
-  if (!memberSince) {
-    var now = new Date();
-    memberSince = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
-    setLS('user_member_since', memberSince);
-  }
-
-  // Mark today as active
-  var todayStr = new Date().toISOString().split('T')[0];
-  if (activeDays.indexOf(todayStr) === -1) {
-    activeDays.push(todayStr);
-    setLS('user_active_days', activeDays);
-  }
-
-  // ===== GREETING =====
-  function getGreeting() {
-    var h = new Date().getHours();
-    if (h < 12) return 'Good morning';
-    if (h < 17) return 'Good afternoon';
-    return 'Good evening';
-  }
-
-  document.getElementById('greetingText').textContent = getGreeting() + ', ' + firstName;
-
-  // ===== HOME STATS =====
-  function updateHomeStats() {
-    document.getElementById('statStreak').textContent = streak;
-    document.getElementById('statXP').textContent = xp;
-    document.getElementById('statBand').textContent = band || 0;
-  }
-
-  function renderTasks() {
-    for (var i = 0; i < 3; i++) {
-      var check = document.getElementById('taskCheck' + i);
-      var text = document.getElementById('taskText' + i);
-      if (tasks[i]) {
-        check.classList.add('checked');
-        text.classList.add('completed');
-      } else {
-        check.classList.remove('checked');
-        text.classList.remove('completed');
-      }
-    }
-  }
-
-  window.toggleTask = function(idx) {
-    if (tasks[idx]) return; // Can't un-complete
-    tasks[idx] = true;
-    xp += 10;
-    setLS('user_tasks_today', tasks);
-    setLS('user_xp', xp);
-    renderTasks();
-    updateHomeStats();
-  };
-
-  updateHomeStats();
-  renderTasks();
-
-  // ===== TAB SWITCHING =====
-  window.switchTab = function(tab) {
-    var tabs = document.querySelectorAll('.tab-content');
-    var navItems = document.querySelectorAll('.nav-item');
-
-    for (var i = 0; i < tabs.length; i++) {
-      tabs[i].classList.remove('active');
-    }
-    for (var j = 0; j < navItems.length; j++) {
-      navItems[j].classList.remove('active');
-    }
-
-    document.getElementById('tab-' + tab).classList.add('active');
-    document.getElementById('nav-' + tab).classList.add('active');
-    document.getElementById('appContainer').scrollTop = 0;
-
-    if (tab === 'progress') {
-      setTimeout(renderChart, 50);
-    }
-    if (tab === 'profile') {
-      updateProfile();
-    }
-  };
-
-  // ===== VOCABULARY =====
-  var vocabWords = [
-    {
-      word: 'Consumption',
-      phonetic: '/kənˈsʌmpʃən/',
-      def: 'The act of using energy, food, or materials; the amount used.',
-      example: '"The consumption of sugar has increased dramatically over the past century."',
-      source: 'Reading Test 1 - Sweet Trouble'
-    },
-    {
-      word: 'Phenomenon',
-      phonetic: '/fəˈnɒmɪnən/',
-      def: 'A fact or situation that is observed to exist or happen, especially one whose cause is in question.',
-      example: '"Prosopagnosia is a neurological phenomenon that affects face recognition."',
-      source: 'Reading Test 2 - Prosopagnosia'
-    },
-    {
-      word: 'Infrastructure',
-      phonetic: '/ˈɪnfrəstrʌktʃər/',
-      def: 'The basic physical and organizational structures needed for the operation of a society.',
-      example: '"The Thames Tunnel represented a major feat of infrastructure engineering."',
-      source: 'Reading Test 3 - Thames Tunnel'
-    },
-    {
-      word: 'Cognitive',
-      phonetic: '/ˈkɒɡnɪtɪv/',
-      def: 'Relating to the mental processes of perception, memory, judgment, and reasoning.',
-      example: '"Multitasking places significant demands on cognitive resources."',
-      source: 'Reading Test 3 - Multitasking'
-    },
-    {
-      word: 'Sustainability',
-      phonetic: '/səˌsteɪnəˈbɪlɪti/',
-      def: 'The ability to maintain at a certain rate or level; avoidance of depletion of natural resources.',
-      example: '"Vertical farming offers new possibilities for agricultural sustainability."',
-      source: 'Reading Test 3 - Skyscraper Farming'
-    },
-    {
-      word: 'Hierarchy',
-      phonetic: '/ˈhaɪərɑːki/',
-      def: 'A system in which members of an organization are ranked according to relative status or authority.',
-      example: '"Traditional organisational design relies on strict hierarchy."',
-      source: 'Reading Test 4 - Organisational Design'
-    },
-    {
-      word: 'Resilience',
-      phonetic: '/rɪˈzɪliəns/',
-      def: 'The capacity to recover quickly from difficulties; toughness.',
-      example: '"Company survival depends largely on organisational resilience."',
-      source: 'Reading Test 5 - Company Survival'
-    },
-    {
-      word: 'Demographic',
-      phonetic: '/ˌdeməˈɡr\xe6fɪk/',
-      def: 'Relating to the structure of populations, especially statistics such as births, deaths, income.',
-      example: '"Understanding demographic shifts is crucial for food policy."',
-      source: 'Reading Test 6 - Humans and Food'
-    },
-    {
-      word: 'Acquisition',
-      phonetic: '/ˌ\xe6kwɪˈzɪʃən/',
-      def: 'The learning or developing of a skill, habit, or quality.',
-      example: '"Mother tongue acquisition occurs naturally in early childhood."',
-      source: 'Reading Test 6 - Mother Tongue'
-    },
-    {
-      word: 'Moderation',
-      phonetic: '/ˌmɒdəˈreɪʃən/',
-      def: 'The avoidance of excess or extremes; the quality of being moderate.',
-      example: '"A digital diet promotes moderation in screen time and technology use."',
-      source: 'Reading Test 7 - Digital Diet'
-    }
-  ];
-
-  var currentCard = 0;
-
-  function renderCard() {
-    var w = vocabWords[currentCard];
-    document.getElementById('fcWord').textContent = w.word;
-    document.getElementById('fcPhonetic').textContent = w.phonetic;
-    document.getElementById('fcDef').textContent = w.def;
-    document.getElementById('fcExample').textContent = w.example;
-    document.getElementById('fcSource').textContent = w.source;
-    document.getElementById('cardCounter').textContent = (currentCard + 1) + ' / ' + vocabWords.length;
-  }
-
-  window.rateCard = function(rating) {
-    currentCard = (currentCard + 1) % vocabWords.length;
-    renderCard();
-  };
-
-  renderCard();
-
-  // ===== TESTS =====
-  var testsData = [
-    { id: 1, type: 'reading', name: 'Reading Test 1: Sweet Trouble', file: 'ielts_reading_test1.html', difficulty: 'medium', questions: 40, time: 60 },
-    { id: 2, type: 'reading', name: 'Reading Test 2: Prosopagnosia', file: 'ielts_reading_test2.html', difficulty: 'medium', questions: 40, time: 60 },
-    { id: 3, type: 'reading', name: 'Reading Test 3: Thames Tunnel', file: 'ielts_reading_test3.html', difficulty: 'hard', questions: 40, time: 60 },
-    { id: 4, type: 'reading', name: 'Reading Test 4: Office Lighting', file: 'ielts_reading_test4.html', difficulty: 'hard', questions: 40, time: 60 },
-    { id: 5, type: 'reading', name: 'Reading Test 5: Why Study History', file: 'ielts_reading_test5.html', difficulty: 'hard', questions: 40, time: 60 },
-    { id: 6, type: 'reading', name: 'Reading Test 6: Humans and Food', file: 'ielts_reading_test6.html', difficulty: 'hard', questions: 40, time: 60 },
-    { id: 7, type: 'reading', name: 'Reading Test 7: Listening to Ocean', file: 'ielts_reading_test7.html', difficulty: 'hard', questions: 40, time: 60 },
-    { id: 8, type: 'listening', name: 'Listening Test 1', file: null, difficulty: 'medium', questions: 40, time: 30, locked: true },
-    { id: 9, type: 'listening', name: 'Listening Test 2', file: null, difficulty: 'medium', questions: 40, time: 30, locked: true },
-    { id: 10, type: 'listening', name: 'Listening Test 3', file: null, difficulty: 'hard', questions: 40, time: 30, locked: true },
-    { id: 11, type: 'listening', name: 'Listening Test 4', file: null, difficulty: 'hard', questions: 40, time: 30, locked: true }
-  ];
-
-  var currentFilter = 'all';
-
-  function renderTests() {
-    var container = document.getElementById('testsList');
-    var html = '';
-
-    for (var i = 0; i < testsData.length; i++) {
-      var t = testsData[i];
-      if (currentFilter !== 'all' && t.type !== currentFilter) continue;
-
-      var isLocked = t.locked === true;
-      var scoreKey = 'test_' + t.id;
-      var savedScore = testScores[scoreKey];
-      var iconClass = t.type === 'reading' ? 'reading' : 'listening';
-      var iconEmoji = t.type === 'reading' ? '&#128214;' : '&#127911;';
-      var timeLabel = t.questions + ' questions · ' + t.time + ' min';
-
-      html += '<div class="test-card' + (isLocked ? ' locked' : '') + '" ' +
-              (isLocked ? '' : 'onclick="window.openTest(\'' + t.file + '\')"') + '>';
-      html += '<div class="test-icon ' + iconClass + '">' + iconEmoji + '</div>';
-      html += '<div class="test-info">';
-      html += '<div class="test-name">' + t.name + '</div>';
-      html += '<div class="test-meta">' + timeLabel + '</div>';
-      html += '</div>';
-      html += '<div class="test-right">';
-
-      if (isLocked) {
-        html += '<span class="lock-icon">&#128274;</span>';
-      } else {
-        html += '<span class="badge ' + t.difficulty + '">' + t.difficulty + '</span>';
-        if (savedScore !== undefined) {
-          html += '<span class="test-score">' + savedScore + '/40</span>';
-        }
-      }
-
-      html += '</div></div>';
-    }
-
-    container.innerHTML = html;
-  }
-
-  window.filterTests = function(filter) {
-    currentFilter = filter;
-    var btns = document.querySelectorAll('.filter-btn');
-    for (var i = 0; i < btns.length; i++) {
-      btns[i].classList.remove('active');
-    }
-    document.getElementById('filter' + filter.charAt(0).toUpperCase() + filter.slice(1)).classList.add('active');
-    renderTests();
-  };
-
-  window.openTest = function(file) {
-    if (file) {
-      window.location.href = file;
-    }
-  };
-
-  renderTests();
-
-  // ===== PROGRESS =====
-  function renderChart() {
-    var canvas = document.getElementById('bandChart');
-    if (!canvas) return;
-    var container = canvas.parentElement;
-    var dpr = window.devicePixelRatio || 1;
-    var w = container.offsetWidth;
-    var h = container.offsetHeight;
-
-    canvas.width = w * dpr;
-    canvas.height = h * dpr;
-    canvas.style.width = w + 'px';
-    canvas.style.height = h + 'px';
-
-    var ctx = canvas.getContext('2d');
-    ctx.scale(dpr, dpr);
-
-    var data = bandHistory.length > 0 ? bandHistory : [5.5, 5.5, 6.0, 6.0, 6.0, 6.5];
-    var labels = ['Wk 1', 'Wk 2', 'Wk 3', 'Wk 4', 'Wk 5', 'Wk 6'];
-
-    var padLeft = 40;
-    var padRight = 16;
-    var padTop = 20;
-    var padBottom = 30;
-    var chartW = w - padLeft - padRight;
-    var chartH = h - padTop - padBottom;
-
-    var minVal = 4.0;
-    var maxVal = 9.0;
-    var range = maxVal - minVal;
-
-    // Grid lines
-    ctx.strokeStyle = 'rgba(255,255,255,0.05)';
-    ctx.lineWidth = 1;
-    ctx.font = '11px -apple-system, sans-serif';
-    ctx.fillStyle = '#5a6a7a';
-    ctx.textAlign = 'right';
-
-    for (var g = minVal; g <= maxVal; g += 1) {
-      var gy = padTop + chartH - ((g - minVal) / range * chartH);
-      ctx.beginPath();
-      ctx.moveTo(padLeft, gy);
-      ctx.lineTo(w - padRight, gy);
-      ctx.stroke();
-      ctx.fillText(g.toFixed(1), padLeft - 8, gy + 4);
-    }
-
-    // X labels
-    ctx.textAlign = 'center';
-    ctx.fillStyle = '#5a6a7a';
-    for (var l = 0; l < labels.length; l++) {
-      var lx = padLeft + (l / (labels.length - 1)) * chartW;
-      ctx.fillText(labels[l], lx, h - 8);
-    }
-
-    // Area fill
-    ctx.beginPath();
-    for (var a = 0; a < data.length; a++) {
-      var ax = padLeft + (a / (data.length - 1)) * chartW;
-      var ay = padTop + chartH - ((data[a] - minVal) / range * chartH);
-      if (a === 0) ctx.moveTo(ax, ay);
-      else ctx.lineTo(ax, ay);
-    }
-    ctx.lineTo(padLeft + chartW, padTop + chartH);
-    ctx.lineTo(padLeft, padTop + chartH);
-    ctx.closePath();
-
-    var gradient = ctx.createLinearGradient(0, padTop, 0, padTop + chartH);
-    gradient.addColorStop(0, 'rgba(0,196,255,0.2)');
-    gradient.addColorStop(1, 'rgba(0,196,255,0)');
-    ctx.fillStyle = gradient;
-    ctx.fill();
-
-    // Line
-    ctx.beginPath();
-    ctx.strokeStyle = '#00C4FF';
-    ctx.lineWidth = 2.5;
-    ctx.lineJoin = 'round';
-    ctx.lineCap = 'round';
-
-    for (var d = 0; d < data.length; d++) {
-      var dx = padLeft + (d / (data.length - 1)) * chartW;
-      var dy = padTop + chartH - ((data[d] - minVal) / range * chartH);
-      if (d === 0) ctx.moveTo(dx, dy);
-      else ctx.lineTo(dx, dy);
-    }
-    ctx.stroke();
-
-    // Dots
-    for (var p = 0; p < data.length; p++) {
-      var px = padLeft + (p / (data.length - 1)) * chartW;
-      var py = padTop + chartH - ((data[p] - minVal) / range * chartH);
-
-      ctx.beginPath();
-      ctx.arc(px, py, 4, 0, Math.PI * 2);
-      ctx.fillStyle = '#00C4FF';
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.arc(px, py, 2, 0, Math.PI * 2);
-      ctx.fillStyle = '#fff';
-      ctx.fill();
-    }
-  }
-
-  // Week calendar
-  function renderWeekCalendar() {
-    var dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    var today = new Date();
-    var dayOfWeek = today.getDay(); // 0=Sun
-    var mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-    var html = '';
-
-    for (var i = 0; i < 7; i++) {
-      var d = new Date(today);
-      d.setDate(today.getDate() + mondayOffset + i);
-      var dateStr = d.toISOString().split('T')[0];
-      var isToday = dateStr === todayStr;
-      var isActive = activeDays.indexOf(dateStr) !== -1;
-
-      var classes = 'day-cell';
-      if (isToday) classes += ' today';
-      if (isActive) classes += ' active';
-
-      html += '<div class="' + classes + '">';
-      html += '<div class="day-label">' + dayLabels[i] + '</div>';
-      html += '<div class="day-dot"></div>';
-      html += '</div>';
-    }
-
-    document.getElementById('weekCalendar').innerHTML = html;
-  }
-
-  // Update progress band
-  var currentBand = getLS('user_band', 6.0);
-  document.getElementById('progressBand').textContent = (currentBand || 6.0).toFixed(1);
-
-  renderWeekCalendar();
-
-  // ===== PROFILE =====
-  function updateProfile() {
-    var initial = firstName.charAt(0).toUpperCase();
-    document.getElementById('profileAvatar').textContent = initial;
-    document.getElementById('profileName').textContent = fullName;
-
-    // Member since
-    if (memberSince) {
-      var parts = memberSince.split('-');
-      var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-      var monthIdx = parseInt(parts[1], 10) - 1;
-      document.getElementById('profileSince').textContent = 'Member since ' + months[monthIdx] + ' ' + parts[0];
-    }
-
-    document.getElementById('profileStreak').textContent = streak;
-    document.getElementById('profileTests').textContent = testsDone;
-    document.getElementById('profileBestBand').textContent = bestBand || 0;
-
-    // Goal progress: current band towards 7.0
-    var goalBand = currentBand || 6.0;
-    var goalPct = Math.min(Math.round((goalBand / 7.0) * 100), 100);
-    document.getElementById('goalPercent').textContent = goalPct + '%';
-    document.getElementById('goalBar').style.width = goalPct + '%';
-
-    // Settings
-    document.getElementById('settingReminder').checked = settings.reminder !== false;
-    document.getElementById('settingStreak').checked = settings.streak !== false;
-    document.getElementById('settingNewTests').checked = settings.newTests === true;
-  }
-
-  window.saveSetting = function(key, value) {
-    settings[key] = value;
-    setLS('user_settings', settings);
-  };
-
-  updateProfile();
-
-  // ===== CHART RESIZE =====
-  var resizeTimer;
-  window.addEventListener('resize', function() {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function() {
-      if (document.getElementById('tab-progress').classList.contains('active')) {
-        renderChart();
-      }
+// ===== TELEGRAM =====
+var tg = window.Telegram && window.Telegram.WebApp;
+if (tg) { tg.ready(); tg.expand(); }
+var user = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
+var firstName = (user && user.first_name) || 'Student';
+var lastName  = (user && user.last_name)  || '';
+var fullName  = (firstName + ' ' + lastName).trim();
+
+// ===== STORAGE =====
+function getLS(k,d){try{var v=localStorage.getItem(k);return v!==null?JSON.parse(v):d;}catch(e){return d;}}
+function setLS(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+
+// ===== DATA =====
+var streak      = getLS('user_streak',0);
+var xp          = getLS('user_xp',0);
+var tasks       = getLS('user_tasks_today',[false,false,false]);
+var settings    = getLS('user_settings',{reminder:true,streak:true,newTests:false});
+var testScores  = getLS('user_test_scores',{});
+var testsDone   = getLS('user_tests_done',0);
+var bestBand    = getLS('user_best_band',null);
+var bandHistory = getLS('user_band_history',[]);
+var activeDays  = getLS('user_active_days',[]);
+var memberSince = getLS('user_member_since',null);
+var vcSeen      = getLS('vc_seen',0);
+var vcHardCount = getLS('vc_hard',0);
+
+if (!memberSince) {
+  var n = new Date();
+  memberSince = n.getFullYear() + '-' + String(n.getMonth()+1).padStart(2,'0');
+  setLS('user_member_since', memberSince);
+}
+var todayStr = new Date().toISOString().split('T')[0];
+if (activeDays.indexOf(todayStr) === -1) { activeDays.push(todayStr); setLS('user_active_days',activeDays); }
+
+// ===== ICONS =====
+function initIcons() { if (window.lucide) window.lucide.createIcons(); }
+
+// ===== TABS =====
+window.switchTab = function(tab) {
+  document.querySelectorAll('.tab').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.nav-item').forEach(function(el){el.classList.remove('active');});
+  document.getElementById('tab-'+tab).classList.add('active');
+  document.getElementById('nav-'+tab).classList.add('active');
+  document.getElementById('appEl').scrollTop = 0;
+  initIcons();
+  if (tab === 'progress') setTimeout(renderProgress, 50);
+  if (tab === 'profile')  renderProfile();
+  if (tab === 'vocab')    renderVocab();
+};
+
+// ===== HOME =====
+function initHome() {
+  var init = firstName.charAt(0).toUpperCase();
+  document.getElementById('homeAvatar').textContent = init;
+  document.getElementById('bigAvatar').textContent  = init;
+  document.getElementById('homeUser').textContent   = fullName || firstName;
+  document.getElementById('bigName').textContent    = fullName || firstName;
+  document.getElementById('statStreak').textContent = streak;
+  document.getElementById('statXP').textContent     = xp;
+  document.getElementById('statBand').textContent   = bestBand !== null ? bestBand : '-';
+
+  if (bestBand) {
+    document.getElementById('ringVal').textContent = bestBand;
+    setTimeout(function(){
+      var offset = 207 - (207 * (bestBand / 9));
+      document.getElementById('homeRing').style.strokeDashoffset = offset;
     }, 150);
+    if (bestBand < 7) {
+      document.getElementById('weekEst').textContent = '~' + Math.ceil((7 - bestBand) / 0.15) + ' weeks to reach goal';
+    } else {
+      document.getElementById('weekEst').textContent = 'Goal reached!';
+    }
+  }
+  renderTasks();
+}
+
+function renderTasks() {
+  var done = 0;
+  for (var i = 0; i < 3; i++) {
+    var check = document.getElementById('tc'+i);
+    var text  = document.getElementById('tt'+i);
+    if (tasks[i]) {
+      check.classList.add('done');
+      check.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#06243c" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+      text.classList.add('done');
+      done++;
+    }
+  }
+  document.getElementById('taskCount').textContent = done + ' / 3';
+}
+
+window.toggleTask = function(idx) {
+  if (tasks[idx]) return;
+  tasks[idx] = true;
+  var xpArr = [50,100,200];
+  xp += xpArr[idx];
+  setLS('user_tasks_today', tasks);
+  setLS('user_xp', xp);
+  document.getElementById('statXP').textContent = xp;
+  renderTasks();
+};
+
+// ===== VOCAB =====
+var vocabWords = [
+  {word:'Consumption',phonetic:'/kənˈsʌmkpʃən/',tag:'NOUN · IELTS',def:'The act of using energy, food, or materials; the amount used.',example:'"The consumption of sugar has increased dramatically over the past century."',source:'Reading Test 1 – Sweet Trouble'},
+  {word:'Phenomenon',phonetic:'/fəˈnɒmɪnən/',tag:'NOUN · ACADEMIC',def:'A fact or situation observed to exist or happen, especially one whose cause is in question.',example:'"Prosopagnosia is a neurological phenomenon affecting face recognition."',source:'Reading Test 2 – Prosopagnosia'},
+  {word:'Infrastructure',phonetic:'/ˈɮnfrstrʌktʃər/',tag:'NOUN · ACADEMIC',def:'The basic physical and organizational structures needed for the operation of a society.',example:'"The Thames Tunnel was a major feat of infrastructure engineering."',source:'Reading Test 3 – Thames Tunnel'},
+  {word:'Cognitive',phonetic:'/ˈkɒɡnɪtɪv/',tag:'ADJECTIVE · ACADEMIC',def:'Relating to the mental processes of perception, memory, judgment, and reasoning.',example:'"Multitasking places significant demands on cognitive resources."',source:'Reading Test 3 – Multitasking'},
+  {word:'Sustainability',phonetic:'/səˌsteɪnəˈbɪlɪti/',tag:'NOUN · ACADEMIC',def:'The ability to be maintained at a certain rate or level; avoidance of depletion of natural resources.',example:'"Vertical farming offers new possibilities for agricultural sustainability."',source:'Reading Test 3 – Skyscraper Farming'},
+  {word:'Hierarchy',phonetic:'/ˈhaɪərɑːki/',tag:'NOUN · ACADEMIC',def:'A system in which members of an organization are ranked according to relative status or authority.',example:'"Traditional organisational design relies on strict hierarchy."',source:'Reading Test 4 – Organisational Design'},
+  {word:'Resilience',phonetic:'/rɪˈzɪliəns/',tag:'NOUN · ACADEMIC',def:'The capacity to recover quickly from difficulties; toughness.',example:'"Company survival depends largely on organisational resilience."',source:'Reading Test 5 – Company Survival'},
+  {word:'Demographic',phonetic:'/ˌdɛməˈɡr\xe6fɪk/',tag:'ADJECTIVE · ACADEMIC',def:'Relating to the structure of populations, especially statistics such as births, deaths, income.',example:'"Understanding demographic shifts is crucial for food policy."',source:'Reading Test 6 – Humans and Food'},
+  {word:'Acquisition',phonetic:'/ˌ\xe6kwɪˈzɪʃən/',tag:'NOUN · ACADEMIC',def:'The learning or developing of a skill, habit, or quality.',example:'"Mother tongue acquisition occurs naturally in early childhood."',source:'Reading Test 6 – Mother Tongue'},
+  {word:'Moderation',phonetic:'/ˌmɒdəˈreɪʃən/',tag:'NOUN · ACADEMIC',def:'The avoidance of excess or extremes; the quality of being moderate.',example:'"A digital diet promotes moderation in screen time and technology use."',source:'Reading Test 7 – Digital Diet'}
+];
+
+var currentCard = 0;
+
+function renderVocab() {
+  var w = vocabWords[currentCard];
+  document.getElementById('fcTag').textContent      = w.tag;
+  document.getElementById('fcWord').textContent     = w.word;
+  document.getElementById('fcPhonetic').textContent = w.phonetic;
+  document.getElementById('fcDef').textContent      = w.def;
+  document.getElementById('fcExample').textContent  = w.example;
+  document.getElementById('fcSource').textContent   = w.source;
+  document.getElementById('fcCounter').textContent  = (currentCard+1) + ' / ' + vocabWords.length;
+  document.getElementById('vcSeen').textContent     = vcSeen;
+  document.getElementById('vcHard').textContent     = vcHardCount;
+}
+
+window.rateCard = function(rating) {
+  if (rating === 'hard') { vcHardCount++; setLS('vc_hard', vcHardCount); }
+  vcSeen = Math.min(vocabWords.length, vcSeen + 1);
+  setLS('vc_seen', vcSeen);
+  currentCard = (currentCard + 1) % vocabWords.length;
+  renderVocab();
+};
+
+// ===== TESTS =====
+var testsData = [
+  {id:1,type:'reading',name:'Reading Test 1: Sweet Trouble',       file:'bandpath_reading_test1.html',   difficulty:'medium',questions:40,time:60},
+  {id:2,type:'reading',name:'Reading Test 2: Prosopagnosia',       file:'bandpath_reading_test2.html',   difficulty:'medium',questions:40,time:60},
+  {id:3,type:'reading',name:'Reading Test 3: Thames Tunnel',       file:'bandpath_reading_test3.html',   difficulty:'hard',  questions:40,time:60},
+  {id:4,type:'reading',name:'Reading Test 4: Office Lighting',     file:'bandpath_reading_test4.html',   difficulty:'hard',  questions:40,time:60},
+  {id:5,type:'reading',name:'Reading Test 5: Why Study History',   file:'bandpath_reading_test5.html',   difficulty:'hard',  questions:40,time:60},
+  {id:6,type:'reading',name:'Reading Test 6: Humans and Food',     file:'bandpath_reading_test6.html',   difficulty:'hard',  questions:40,time:60},
+  {id:7,type:'reading',name:'Reading Test 7: Listening to Ocean',  file:'bandpath_reading_test7.html',   difficulty:'hard',  questions:40,time:60},
+  {id:8,type:'listening',name:'Listening Test 1: Apartments & Travel',file:'bandpath_listening_test1.html',difficulty:'medium',questions:40,time:30},
+  {id:9,type:'listening',name:'Listening Test 2', file:null,difficulty:'medium',questions:40,time:30,locked:true},
+  {id:10,type:'listening',name:'Listening Test 3',file:null,difficulty:'hard',  questions:40,time:30,locked:true},
+  {id:11,type:'listening',name:'Listening Test 4',file:null,difficulty:'hard',  questions:40,time:30,locked:true}
+];
+
+var currentFilter = 'all';
+
+function renderTests() {
+  var html = '';
+  testsData.forEach(function(t) {
+    if (currentFilter !== 'all' && t.type !== currentFilter) return;
+    var locked = t.locked === true;
+    var score  = testScores['test_'+t.id];
+    var done   = score !== undefined;
+    var icon   = t.type === 'reading' ? 'file-text' : 'headphones';
+    var diff   = t.difficulty === 'medium' ? 'Med' : t.difficulty.charAt(0).toUpperCase()+t.difficulty.slice(1);
+    var cls    = 'test-item'+(locked?' locked':'')+(done?' done':'');
+    var click  = (!locked && t.file) ? ' onclick="openTest(\''+t.file+'\')"' : '';
+    html += '<div class="'+cls+'"'+click+'>';
+    html += '<div class="test-icon"><i data-lucide="'+icon+'" style="width:21px;height:21px;"></i></div>';
+    html += '<div style="flex:1;min-width:0;">';
+    html += '<div class="test-name">'+t.name+'</div>';
+    html += '<div class="test-meta"><span class="test-meta-lbl">'+t.questions+' questions · '+t.time+' min</span>';
+    html += '<span class="badge '+t.difficulty+'">'+diff+'</span></div>';
+    html += '</div><div class="test-right">';
+    if (locked) html += '<i data-lucide="lock" style="width:18px;height:18px;color:var(--text3);"></i>';
+    else if (done) html += '<span class="test-score">'+Math.round((score/40)*100)+'%</span>';
+    html += '</div></div>';
+  });
+  document.getElementById('testsList').innerHTML = html;
+  initIcons();
+}
+
+window.filterTests = function(f) {
+  currentFilter = f;
+  document.getElementById('filterAll').classList.toggle('active', f==='all');
+  document.getElementById('filterReading').classList.toggle('active', f==='reading');
+  document.getElementById('filterListening').classList.toggle('active', f==='listening');
+  renderTests();
+};
+
+window.openTest = function(file) { if (file) window.location.href = file; };
+
+// ===== PROGRESS =====
+function renderProgress() {
+  var data = bandHistory.length >= 2 ? bandHistory.slice(-7) : [5.5,5.5,6.0,6.0,6.0,6.5];
+  var n = data.length, W = 280, H = 120, mn = 4, mx = 9;
+  var pts = data.map(function(v,i){ return {x:i*(W/(n-1)),y:H-((v-mn)/(mx-mn))*H}; });
+  var d   = pts.map(function(p,i){ return (i?'L':'M')+p.x.toFixed(1)+' '+p.y.toFixed(1); }).join(' ');
+  var fill = d+' L'+pts[n-1].x.toFixed(1)+' '+H+' L0 '+H+' Z';
+  document.getElementById('bandSVG').innerHTML =
+    '<defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#00C4FF" stop-opacity=".4"/><stop offset="1" stop-color="#00C4FF" stop-opacity="0"/></linearGradient></defs>'+
+    '<path d="'+fill+'" fill="url(#ag)"/>'+
+    '<path d="'+d+'" fill="none" stroke="#00C4FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 5px rgba(0,196,255,.7));"/>'+
+    '<circle cx="'+pts[n-1].x.toFixed(1)+'" cy="'+pts[n-1].y.toFixed(1)+'" r="4.5" fill="#fff" stroke="#00C4FF" stroke-width="2.5"/>';
+  document.getElementById('bandLabels').innerHTML = data.map(function(v){return '<span>'+v+'</span>';}).join('');
+
+  var acc = getLS('user_accuracy',{tf:0,mcq:0,fill:0,match:0});
+  [{id:'acc1',bar:'bar1',v:acc.tf},{id:'acc2',bar:'bar2',v:acc.mcq},{id:'acc3',bar:'bar3',v:acc.fill},{id:'acc4',bar:'bar4',v:acc.match}].forEach(function(a){
+    document.getElementById(a.id).textContent = a.v ? a.v+'%' : '--';
+    setTimeout(function(){document.getElementById(a.bar).style.width=(a.v||0)+'%';},50);
   });
 
-})();
+  var grid = document.getElementById('calGrid');
+  grid.innerHTML = '';
+  var today = new Date();
+  for (var i = 20; i >= 0; i--) {
+    var d2 = new Date(today); d2.setDate(today.getDate()-i);
+    var ds = d2.toISOString().split('T')[0];
+    var isToday  = ds === todayStr;
+    var isActive = activeDays.indexOf(ds) !== -1;
+    var bg = isToday ? '#2ed573' : isActive ? '#00C4FF' : 'rgba(255,255,255,.06)';
+    var el = document.createElement('div');
+    el.style.cssText = 'aspect-ratio:1;border-radius:5px;background:'+bg+';'+(isToday||isActive?'box-shadow:0 0 8px -2px '+bg+';':'');
+    grid.appendChild(el);
+  }
+}
+
+// ===== PROFILE =====
+function renderProfile() {
+  document.getElementById('bigAvatar').textContent = firstName.charAt(0).toUpperCase();
+  document.getElementById('bigName').textContent   = fullName || firstName;
+  var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  if (memberSince) {
+    var p = memberSince.split('-');
+    document.getElementById('bigSince').textContent = 'Member since '+months[parseInt(p[1],10)-1]+' '+p[0];
+  }
+  document.getElementById('ps1').textContent = streak;
+  document.getElementById('ps2').textContent = testsDone;
+  document.getElementById('ps3').textContent = bestBand !== null ? bestBand : '-';
+  if (bestBand && bestBand < 7)
+    document.getElementById('goalText').textContent = '~'+Math.ceil((7-bestBand)/0.15)+' weeks at current pace';
+  else if (bestBand >= 7)
+    document.getElementById('goalText').textContent = 'Goal reached! Aim higher.';
+
+  ['reminder','streak','newTests'].forEach(function(key,i){
+    var on = settings[key] !== false;
+    document.getElementById('tog'+i).className = 'tog '+(on?'on':'off');
+  });
+  initIcons();
+}
+
+window.toggleSetting = function(idx, key) {
+  settings[key] = !settings[key];
+  setLS('user_settings', settings);
+  document.getElementById('tog'+idx).className = 'tog '+(settings[key]?'on':'off');
+};
+
+// ===== BOOT =====
+window.addEventListener('load', function() {
+  initIcons();
+  initHome();
+  renderTests();
+  renderVocab();
+});
 </script>
 </body>
 </html>
-12
