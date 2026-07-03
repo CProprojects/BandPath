@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>BandPath - IELTS Prep</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
@@ -1162,14 +1162,12 @@ body {
   var activeDays = getLS('user_active_days', []);
   var memberSince = getLS('user_member_since', null);
 
-  // Set member since on first visit
   if (!memberSince) {
     var now = new Date();
     memberSince = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
     setLS('user_member_since', memberSince);
   }
 
-  // Mark today as active
   var todayStr = new Date().toISOString().split('T')[0];
   if (activeDays.indexOf(todayStr) === -1) {
     activeDays.push(todayStr);
@@ -1208,7 +1206,7 @@ body {
   }
 
   window.toggleTask = function(idx) {
-    if (tasks[idx]) return; // Can't un-complete
+    if (tasks[idx]) return;
     tasks[idx] = true;
     xp += 10;
     setLS('user_tasks_today', tasks);
@@ -1276,21 +1274,21 @@ body {
     },
     {
       word: 'Sustainability',
-      phonetic: '/səˌsteɪnəˈbɪlɪti/',
+      phonetic: '/səˈsteɪnəˈbɪlɪti/',
       def: 'The ability to maintain at a certain rate or level; avoidance of depletion of natural resources.',
       example: '"Vertical farming offers new possibilities for agricultural sustainability."',
       source: 'Reading Test 3 - Skyscraper Farming'
     },
     {
       word: 'Hierarchy',
-      phonetic: '/ˈhaɪərɑːki/',
+      phonetic: '/ˈhaɪərˌki/',
       def: 'A system in which members of an organization are ranked according to relative status or authority.',
       example: '"Traditional organisational design relies on strict hierarchy."',
       source: 'Reading Test 4 - Organisational Design'
     },
     {
       word: 'Resilience',
-      phonetic: '/rɪˈzɪliəns/',
+      phonetic: '/rɪˈzɪlieəns/',
       def: 'The capacity to recover quickly from difficulties; toughness.',
       example: '"Company survival depends largely on organisational resilience."',
       source: 'Reading Test 5 - Company Survival'
@@ -1442,7 +1440,6 @@ body {
     var maxVal = 9.0;
     var range = maxVal - minVal;
 
-    // Grid lines
     ctx.strokeStyle = 'rgba(255,255,255,0.05)';
     ctx.lineWidth = 1;
     ctx.font = '11px -apple-system, sans-serif';
@@ -1458,7 +1455,6 @@ body {
       ctx.fillText(g.toFixed(1), padLeft - 8, gy + 4);
     }
 
-    // X labels
     ctx.textAlign = 'center';
     ctx.fillStyle = '#5a6a7a';
     for (var l = 0; l < labels.length; l++) {
@@ -1466,7 +1462,6 @@ body {
       ctx.fillText(labels[l], lx, h - 8);
     }
 
-    // Area fill
     ctx.beginPath();
     for (var a = 0; a < data.length; a++) {
       var ax = padLeft + (a / (data.length - 1)) * chartW;
@@ -1484,7 +1479,6 @@ body {
     ctx.fillStyle = gradient;
     ctx.fill();
 
-    // Line
     ctx.beginPath();
     ctx.strokeStyle = '#00C4FF';
     ctx.lineWidth = 2.5;
@@ -1499,7 +1493,6 @@ body {
     }
     ctx.stroke();
 
-    // Dots
     for (var p = 0; p < data.length; p++) {
       var px = padLeft + (p / (data.length - 1)) * chartW;
       var py = padTop + chartH - ((data[p] - minVal) / range * chartH);
@@ -1516,11 +1509,10 @@ body {
     }
   }
 
-  // Week calendar
   function renderWeekCalendar() {
     var dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     var today = new Date();
-    var dayOfWeek = today.getDay(); // 0=Sun
+    var dayOfWeek = today.getDay();
     var mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
     var html = '';
 
@@ -1544,7 +1536,6 @@ body {
     document.getElementById('weekCalendar').innerHTML = html;
   }
 
-  // Update progress band
   var currentBand = getLS('user_band', 6.0);
   document.getElementById('progressBand').textContent = (currentBand || 6.0).toFixed(1);
 
@@ -1556,7 +1547,6 @@ body {
     document.getElementById('profileAvatar').textContent = initial;
     document.getElementById('profileName').textContent = fullName;
 
-    // Member since
     if (memberSince) {
       var parts = memberSince.split('-');
       var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -1568,13 +1558,11 @@ body {
     document.getElementById('profileTests').textContent = testsDone;
     document.getElementById('profileBestBand').textContent = bestBand || 0;
 
-    // Goal progress: current band towards 7.0
     var goalBand = currentBand || 6.0;
     var goalPct = Math.min(Math.round((goalBand / 7.0) * 100), 100);
     document.getElementById('goalPercent').textContent = goalPct + '%';
     document.getElementById('goalBar').style.width = goalPct + '%';
 
-    // Settings
     document.getElementById('settingReminder').checked = settings.reminder !== false;
     document.getElementById('settingStreak').checked = settings.streak !== false;
     document.getElementById('settingNewTests').checked = settings.newTests === true;
