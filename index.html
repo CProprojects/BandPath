@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>BandPath - IELTS Prep</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
@@ -18,7 +18,7 @@
   --bg-card: #132f4c;
   --accent: #00C4FF;
   --accent-glow: rgba(0, 196, 255, 0.15);
-  --text-primary: #ffffff;
+  --text-primary: #ffffff;\
   --text-muted: #b2bac2;
   --text-dim: #5a6a7a;
   --green: #2ecc71;
@@ -1162,12 +1162,14 @@ body {
   var activeDays = getLS('user_active_days', []);
   var memberSince = getLS('user_member_since', null);
 
+  // Set member since on first visit
   if (!memberSince) {
     var now = new Date();
     memberSince = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
     setLS('user_member_since', memberSince);
   }
 
+  // Mark today as active
   var todayStr = new Date().toISOString().split('T')[0];
   if (activeDays.indexOf(todayStr) === -1) {
     activeDays.push(todayStr);
@@ -1206,7 +1208,7 @@ body {
   }
 
   window.toggleTask = function(idx) {
-    if (tasks[idx]) return;
+    if (tasks[idx]) return; // Can't un-complete
     tasks[idx] = true;
     xp += 10;
     setLS('user_tasks_today', tasks);
@@ -1274,21 +1276,21 @@ body {
     },
     {
       word: 'Sustainability',
-      phonetic: '/səˈsteɪnəˈbɪlɪti/',
+      phonetic: '/səˌsteɪnəˈbɪlɪti/',
       def: 'The ability to maintain at a certain rate or level; avoidance of depletion of natural resources.',
       example: '"Vertical farming offers new possibilities for agricultural sustainability."',
       source: 'Reading Test 3 - Skyscraper Farming'
     },
     {
       word: 'Hierarchy',
-      phonetic: '/ˈhaɪərˌki/',
+      phonetic: '/ˈhaɪərɑːki/',
       def: 'A system in which members of an organization are ranked according to relative status or authority.',
       example: '"Traditional organisational design relies on strict hierarchy."',
       source: 'Reading Test 4 - Organisational Design'
     },
     {
       word: 'Resilience',
-      phonetic: '/rɪˈzɪlieəns/',
+      phonetic: '/rɪˈzɪliəns/',
       def: 'The capacity to recover quickly from difficulties; toughness.',
       example: '"Company survival depends largely on organisational resilience."',
       source: 'Reading Test 5 - Company Survival'
@@ -1337,14 +1339,14 @@ body {
 
   // ===== TESTS =====
   var testsData = [
-    { id: 1, type: 'reading', name: 'Reading Test 1: Sweet Trouble', file: 'bandpath_reading_test1.html', difficulty: 'medium', questions: 40, time: 60 },
-    { id: 2, type: 'reading', name: 'Reading Test 2: Prosopagnosia', file: 'bandpath_reading_test2.html', difficulty: 'medium', questions: 40, time: 60 },
-    { id: 3, type: 'reading', name: 'Reading Test 3: Thames Tunnel', file: 'bandpath_reading_test3.html', difficulty: 'hard', questions: 40, time: 60 },
-    { id: 4, type: 'reading', name: 'Reading Test 4: Office Lighting', file: 'bandpath_reading_test4.html', difficulty: 'hard', questions: 40, time: 60 },
-    { id: 5, type: 'reading', name: 'Reading Test 5: Why Study History', file: 'bandpath_reading_test5.html', difficulty: 'hard', questions: 40, time: 60 },
-    { id: 6, type: 'reading', name: 'Reading Test 6: Humans and Food', file: 'bandpath_reading_test6.html', difficulty: 'hard', questions: 40, time: 60 },
-    { id: 7, type: 'reading', name: 'Reading Test 7: Listening to Ocean', file: 'bandpath_reading_test7.html', difficulty: 'hard', questions: 40, time: 60 },
-    { id: 8, type: 'listening', name: 'Listening Test 1: Apartments & Travel', file: 'bandpath_listening_test1.html', difficulty: 'medium', questions: 40, time: 30, locked: false },
+    { id: 1, type: 'reading', name: 'Reading Test 1: Sweet Trouble', file: 'ielts_reading_test1.html', difficulty: 'medium', questions: 40, time: 60 },
+    { id: 2, type: 'reading', name: 'Reading Test 2: Prosopagnosia', file: 'ielts_reading_test2.html', difficulty: 'medium', questions: 40, time: 60 },
+    { id: 3, type: 'reading', name: 'Reading Test 3: Thames Tunnel', file: 'ielts_reading_test3.html', difficulty: 'hard', questions: 40, time: 60 },
+    { id: 4, type: 'reading', name: 'Reading Test 4: Office Lighting', file: 'ielts_reading_test4.html', difficulty: 'hard', questions: 40, time: 60 },
+    { id: 5, type: 'reading', name: 'Reading Test 5: Why Study History', file: 'ielts_reading_test5.html', difficulty: 'hard', questions: 40, time: 60 },
+    { id: 6, type: 'reading', name: 'Reading Test 6: Humans and Food', file: 'ielts_reading_test6.html', difficulty: 'hard', questions: 40, time: 60 },
+    { id: 7, type: 'reading', name: 'Reading Test 7: Listening to Ocean', file: 'ielts_reading_test7.html', difficulty: 'hard', questions: 40, time: 60 },
+    { id: 8, type: 'listening', name: 'Listening Test 1', file: null, difficulty: 'medium', questions: 40, time: 30, locked: true },
     { id: 9, type: 'listening', name: 'Listening Test 2', file: null, difficulty: 'medium', questions: 40, time: 30, locked: true },
     { id: 10, type: 'listening', name: 'Listening Test 3', file: null, difficulty: 'hard', questions: 40, time: 30, locked: true },
     { id: 11, type: 'listening', name: 'Listening Test 4', file: null, difficulty: 'hard', questions: 40, time: 30, locked: true }
@@ -1440,6 +1442,7 @@ body {
     var maxVal = 9.0;
     var range = maxVal - minVal;
 
+    // Grid lines
     ctx.strokeStyle = 'rgba(255,255,255,0.05)';
     ctx.lineWidth = 1;
     ctx.font = '11px -apple-system, sans-serif';
@@ -1455,6 +1458,7 @@ body {
       ctx.fillText(g.toFixed(1), padLeft - 8, gy + 4);
     }
 
+    // X labels
     ctx.textAlign = 'center';
     ctx.fillStyle = '#5a6a7a';
     for (var l = 0; l < labels.length; l++) {
@@ -1462,6 +1466,7 @@ body {
       ctx.fillText(labels[l], lx, h - 8);
     }
 
+    // Area fill
     ctx.beginPath();
     for (var a = 0; a < data.length; a++) {
       var ax = padLeft + (a / (data.length - 1)) * chartW;
@@ -1479,6 +1484,7 @@ body {
     ctx.fillStyle = gradient;
     ctx.fill();
 
+    // Line
     ctx.beginPath();
     ctx.strokeStyle = '#00C4FF';
     ctx.lineWidth = 2.5;
@@ -1493,6 +1499,7 @@ body {
     }
     ctx.stroke();
 
+    // Dots
     for (var p = 0; p < data.length; p++) {
       var px = padLeft + (p / (data.length - 1)) * chartW;
       var py = padTop + chartH - ((data[p] - minVal) / range * chartH);
@@ -1509,10 +1516,11 @@ body {
     }
   }
 
+  // Week calendar
   function renderWeekCalendar() {
     var dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     var today = new Date();
-    var dayOfWeek = today.getDay();
+    var dayOfWeek = today.getDay(); // 0=Sun
     var mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
     var html = '';
 
@@ -1536,6 +1544,7 @@ body {
     document.getElementById('weekCalendar').innerHTML = html;
   }
 
+  // Update progress band
   var currentBand = getLS('user_band', 6.0);
   document.getElementById('progressBand').textContent = (currentBand || 6.0).toFixed(1);
 
@@ -1547,6 +1556,7 @@ body {
     document.getElementById('profileAvatar').textContent = initial;
     document.getElementById('profileName').textContent = fullName;
 
+    // Member since
     if (memberSince) {
       var parts = memberSince.split('-');
       var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -1558,11 +1568,13 @@ body {
     document.getElementById('profileTests').textContent = testsDone;
     document.getElementById('profileBestBand').textContent = bestBand || 0;
 
+    // Goal progress: current band towards 7.0
     var goalBand = currentBand || 6.0;
     var goalPct = Math.min(Math.round((goalBand / 7.0) * 100), 100);
     document.getElementById('goalPercent').textContent = goalPct + '%';
     document.getElementById('goalBar').style.width = goalPct + '%';
 
+    // Settings
     document.getElementById('settingReminder').checked = settings.reminder !== false;
     document.getElementById('settingStreak').checked = settings.streak !== false;
     document.getElementById('settingNewTests').checked = settings.newTests === true;
@@ -1590,3 +1602,4 @@ body {
 </script>
 </body>
 </html>
+12
