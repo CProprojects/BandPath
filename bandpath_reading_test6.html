@@ -362,6 +362,7 @@ body.dark #results-screen{background:radial-gradient(120% 60% at 50% 0%,#123558 
   </div>
   <div class="sg" style="border-top:1px solid var(--border);padding-top:12px;margin-top:2px">
     <button onclick="restartTest()" style="display:flex;align-items:center;justify-content:center;gap:7px;width:100%;background:rgba(255,107,107,.14);color:#ff7a6b;border:1px solid rgba(255,107,107,.3);padding:9px;border-radius:9px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700;letter-spacing:.3px"><svg class="ic" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Restart Test</button>
+    <button onclick="window.location.href='index.html'" style="display:flex;align-items:center;justify-content:center;gap:7px;width:100%;background:rgba(0,196,255,.1);color:var(--accent);border:1px solid rgba(0,196,255,.3);padding:9px;border-radius:9px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700;letter-spacing:.3px;margin-top:9px"><svg class="ic" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>Home</button>
   </div>
 </div>
 
@@ -483,7 +484,13 @@ const PASSAGES=[
 // ═══════════════════════════════════════════
 // PEOPLE / WORD BANKS
 // ═══════════════════════════════════════════
-
+const WORDS_P3=[
+  {letter:'C',word:'dislocation'},
+  {letter:'D',word:'rate'},
+  {letter:'F',word:'family'},
+  {letter:'I',word:'ability'},
+  {letter:'J',word:'area'}
+];
 
 // ═══════════════════════════════════════════
 // QUESTIONS
@@ -913,9 +920,19 @@ function renderQ(q){
   }else if(q.type==='mcq'){
     const opts=(q.options||[]).map((o,i)=>{const l=String.fromCharCode(65+i);return`<label class="q-option${val===l?' selected':''}"><input type="radio" name="q${q.id}" value="${l}"${val===l?' checked':''} onchange="setMCQ(${q.id},'${l}')"><span>${o}</span></label>`;}).join('');
     inner=`<div class="q-text">${q.text}</div><div class="q-options">${opts}</div>`;
+  }else if(q.type==='multi2'){
+    const sel=val?val.split(''):[];
+    const opts=(q.options||[]).map((o,i)=>{
+      const l=String.fromCharCode(65+i);
+      const checked=sel.includes(l);
+      const dis=(!checked&&sel.length>=2)?' disabled':'';
+      return`<label class="q-option${checked?' selected':''}"><input type="checkbox" value="${l}"${checked?' checked':''}${dis} onchange="setMulti2(${q.id},'${l}',this.checked)"><span>${o}</span></label>`;
+    }).join('');
+    inner=`<div class="q-text">${q.text}</div><div class="q-options">${opts}</div>`;
   }
+  const qLabel=q.type==='multi2'?`Questions ${q.id}–${q.id+1}`:`Question ${q.id}`;
   return `<div class="q-block${fl?' flagged':''}${val?' answered':''}" id="qblock${q.id}">
-    <div class="q-num">Question ${q.id}</div>${inner}
+    <div class="q-num">${qLabel}</div>${inner}
     <button class="flag-btn${fl?' active':''}" onclick="toggleFlag(${q.id})" title="Flag">${SVG(ICONS.flag,{s:15})}</button>
   </div>`;
 }
@@ -926,6 +943,15 @@ function renderQ(q){
 function setAnswer(id,val){answers[id]=val;updateBlock(id);saveAll();updatePalette();}
 function setTFNG(id,val,btn){answers[id]=val;btn.closest('.tfng-btns').querySelectorAll('.tfng-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');updateBlock(id);saveAll();updatePalette();}
 function setMCQ(id,val){answers[id]=val;document.querySelectorAll(`[name="q${id}"]`).forEach(r=>{const l=r.closest('.q-option');if(l)l.classList.toggle('selected',r.value===val);});updateBlock(id);saveAll();updatePalette();}
+function setMulti2(id,letter,checked){
+  let cur=(answers[id]||'').split('').filter(Boolean);
+  if(checked){if(!cur.includes(letter))cur.push(letter);}
+  else{cur=cur.filter(l=>l!==letter);}
+  cur.sort();
+  answers[id]=cur.join('');
+  renderQuestions(currentPassage);
+  saveAll();updatePalette();
+}
 function updateBlock(id){const b=document.getElementById('qblock'+id);if(b){b.classList.toggle('answered',!!(answers[id]&&answers[id].trim()));b.classList.toggle('flagged',!!(flags[id]));}}
 function toggleFlag(id){flags[id]=!flags[id];const b=document.querySelector(`#qblock${id} .flag-btn`);if(b)b.classList.toggle('active',flags[id]);updateBlock(id);saveAll();updatePalette();}
 
@@ -941,15 +967,17 @@ function updatePalette(){
   for(let i=1;i<=40;i++){
     const e=document.getElementById('pal'+i);if(!e)continue;
     e.classList.remove('done','flagged');
-    if(flags[i])e.classList.add('flagged');
-    else if(answers[i]&&answers[i].trim())e.classList.add('done');
+    let q=QUESTIONS.find(q=>q.id===i)||QUESTIONS.find(q=>q.type==='multi2'&&q.id===i-1);
+    if(!q)continue;
+    if(flags[q.id])e.classList.add('flagged');
+    else if(answers[q.id]&&answers[q.id].trim())e.classList.add('done');
   }
 }
 function jumpToQ(id){
-  const q=QUESTIONS.find(q=>q.id===id);if(!q)return;
+  const q=QUESTIONS.find(q=>q.id===id)||QUESTIONS.find(q=>q.type==='multi2'&&q.id===id-1);if(!q)return;
   if(q.passage!==currentPassage)switchPassage(q.passage);
   setTimeout(()=>{
-    const el=document.getElementById('qblock'+id);
+    const el=document.getElementById('qblock'+q.id);
     if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.style.boxShadow='0 0 0 3px var(--accent)';setTimeout(()=>el.style.boxShadow='',1600);}
     document.querySelectorAll('.pal-num').forEach(b=>b.classList.remove('active'));
     const pb=document.getElementById('pal'+id);if(pb)pb.classList.add('active');
@@ -980,8 +1008,11 @@ function initScrollProgress(){
 
 function flashUnanswered(){
   QUESTIONS.filter(q=>!answers[q.id]||!answers[q.id].trim()).forEach(q=>{
-    const el=document.getElementById('pal'+q.id);
-    if(el){el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),1600);}
+    const ids=q.type==='multi2'?[q.id,q.id+1]:[q.id];
+    ids.forEach(i=>{
+      const el=document.getElementById('pal'+i);
+      if(el){el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),1600);}
+    });
   });
 }
 
@@ -1075,11 +1106,12 @@ function showResults(){
   let correct=0,wrong=0,skip=0;
   const bp=PASSAGES.map(()=>({correct:0,wrong:0,skip:0}));
   QUESTIONS.forEach(q=>{
+    const w=q.type==='multi2'?2:1;
     const ua=(answers[q.id]||'').trim();
     const ok=isCorrect(q,ua);
-    if(!ua){skip++;bp[q.passage].skip++;}
-    else if(ok){correct++;bp[q.passage].correct++;}
-    else{wrong++;bp[q.passage].wrong++;}
+    if(!ua){skip+=w;bp[q.passage].skip+=w;}
+    else if(ok){correct+=w;bp[q.passage].correct+=w;}
+    else{wrong+=w;bp[q.passage].wrong+=w;}
   });
   let band=2.5,desc='Intermittent User';
   for(const b of BAND_TABLE){if(correct>=b.min&&correct<=b.max){band=b.band;desc=b.desc;break;}}
@@ -1140,6 +1172,10 @@ function applyReviewMarkup(){
     }else if(q.type==='mcq'){
       document.querySelectorAll(`[name="q${q.id}"]`).forEach(r=>r.disabled=true);
       if(q.hint){const block=document.getElementById('qblock'+q.id);if(block&&!block.querySelector('.answer-hint')){const h=document.createElement('div');h.className='answer-hint';h.style.marginTop='8px';h.innerHTML=SVG(ICONS.pin,{s:12})+' ';h.appendChild(document.createTextNode(q.hint));const opts=block.querySelector('.q-options');if(opts)opts.after(h);}}
+    }else if(q.type==='multi2'){
+      const block=document.getElementById('qblock'+q.id);
+      if(block)block.querySelectorAll('input[type="checkbox"]').forEach(c=>c.disabled=true);
+      if(q.hint&&block&&!block.querySelector('.answer-hint')){const h=document.createElement('div');h.className='answer-hint';h.style.marginTop='8px';h.innerHTML=SVG(ICONS.pin,{s:12})+' ';h.appendChild(document.createTextNode(q.hint+' (Correct: '+q.answer.split('').join(', ')+')'));const opts=block.querySelector('.q-options');if(opts)opts.after(h);}
     }
   });
 }
@@ -1174,10 +1210,6 @@ function renderQuestions(pIdx){
     if(q.instruction&&q.instruction!==lastInstr){
       h+=`<div class="q-section-title">${q.instruction}</div>`;
       lastInstr=q.instruction;
-      // Passage 2: paragraph bank before Q14
-      if(pIdx===1 && q.id===14){
-        h+=renderParaBank();
-      }
       // Passage 3: word bank before Q31
       if(pIdx===2 && q.id===31){
         h+=renderWordBankP3();

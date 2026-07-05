@@ -362,6 +362,7 @@ body.dark #results-screen{background:radial-gradient(120% 60% at 50% 0%,#123558 
   </div>
   <div class="sg" style="border-top:1px solid var(--border);padding-top:12px;margin-top:2px">
     <button onclick="restartTest()" style="display:flex;align-items:center;justify-content:center;gap:7px;width:100%;background:rgba(255,107,107,.14);color:#ff7a6b;border:1px solid rgba(255,107,107,.3);padding:9px;border-radius:9px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700;letter-spacing:.3px"><svg class="ic" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Restart Test</button>
+    <button onclick="window.location.href='index.html'" style="display:flex;align-items:center;justify-content:center;gap:7px;width:100%;background:rgba(0,196,255,.1);color:var(--accent);border:1px solid rgba(0,196,255,.3);padding:9px;border-radius:9px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700;letter-spacing:.3px;margin-top:9px"><svg class="ic" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>Home</button>
   </div>
 </div>
 
@@ -490,6 +491,21 @@ const PASSAGES=[
 // ═══════════════════════════════════════════
 // PEOPLE / WORD BANKS
 // ═══════════════════════════════════════════
+const THEORIES_P1=[
+  {letter:'B',word:'It helps us to understand human nature.'},
+  {letter:'C',word:'It helps us to understand the present.'},
+  {letter:'D',word:'It provides examples to copy.'},
+  {letter:'F',word:'It helps to improve our ability to make decisions.'}
+];
+
+const WORDS_P1=[
+  {letter:'B',word:'decline'},
+  {letter:'D',word:'change'},
+  {letter:'E',word:'identity'},
+  {letter:'H',word:'liberty'},
+  {letter:'I',word:'tolerance'}
+];
+
 const HEADINGS_P2=[
   {letter:'i',word:'Propositions that needed further investigation'},
   {letter:'ii',word:'The most valuable instrument ever made'},
@@ -1173,10 +1189,6 @@ function renderQuestions(pIdx){
       if(pIdx===1 && q.id===14){
         h+=renderHeadingsBank();
       }
-      // Passage 3: paragraph bank before Q35
-      if(pIdx===2 && q.id===35){
-        h+=renderParaBank();
-      }
     }
     h+=renderQ(q);
   });
@@ -1190,6 +1202,9 @@ function renderWordBankP1(){
   let h=`<div class="word-bank"><div class="word-bank-title">Word Bank — A to J</div><div class="word-bank-grid">`;
   WORDS_P1.forEach(item=>{h+=`<div class="wb-item"><span class="wb-letter">${item.letter}</span><span>${item.word}</span></div>`;});
   h+=`</div></div>`;return h;
+}
+function renderTheoriesBank(){
+  return renderPersonBank(THEORIES_P1,'List of Theories — B, C, D or F (you may use any letter more than once)');
 }
 
 function renderHeadingsBank(){
